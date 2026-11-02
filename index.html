@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nf.traderr | أكاديمية ICT بإشراف Nova</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cairo for Arabic, Cormorant Garamond for Brand Logo, Space Grotesk for Telemetry -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Three.js r128 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        arabic: ['Cairo', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                        serif: ['Cormorant Garamond', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==========================================================================
+           LOCKED LUXURY PALETTE: WARM EDITORIAL BEIGE & ROYAL MARINE BLUE
+           Beige Canvas: #F2ECE1, #E6DEC8, #D5C7B2 | Royal Marine: #0050A0, #12A8E0, #051747
+           ========================================================================== */
+        :root {
+            --bg-main: #F2ECE1;
+            --bg-secondary: #E6DEC8;
+            --card-bg: rgba(5, 23, 71, 0.94);
+            --card-border: rgba(0, 80, 160, 0.35);
+            --text-main: #FEFEFE;
+            --text-muted: #E6DEC8;
+            --text-subtle: #93C5FD;
+            --primary-blue: #0050A0;
+            --accent-cyan: #12A8E0;
+            --accent-gold: #C89D54;
+            --accent-crimson: #E5002B;
+            --input-bg: rgba(3, 15, 48, 0.94);
+            --ambient-grad: radial-gradient(circle at 62% 45%, rgba(18, 168, 224, 0.16) 0%, rgba(230, 222, 200, 0.88) 52%, #E5DDD0 100%);
+            --orbital-line: rgba(5, 23, 71, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* CRITICAL NATIVE SCROLL GUARANTEE */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            height: auto !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            scroll-behavior: smooth;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #E6DEC8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #0050A0, #051747);
+            border-radius: 10px;
+            border: 2px solid #E6DEC8;
+        }
+
+        /* Ambient Celestial Backdrop - NEVER blocks scroll */
+        #ambient-backdrop {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 0 !important;
+            background: var(--ambient-grad);
+            pointer-events: none !important;
+        }
+
+        /* Celestial SVG Orbital Overlay - NEVER blocks scroll */
+        .celestial-orbits {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+            overflow: hidden;
+        }
+
+        /* Fullscreen Fixed 3D WebGL Canvas - STRICTLY pointer-events: none so native scroll works 100% everywhere */
+        #webgl-container,
+        #webgl-container canvas {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 2 !important;
+            pointer-events: none !important;
+            user-select: none;
+        }
+
+        /* Foreground Scroll Layer in Normal Vertical Document Flow */
+        .scroll-layer {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            pointer-events: auto;
+        }
+
+        .interactive-el {
+            pointer-events: auto;
+        }
+
+        /* Glassmorphic Story Cards (Deep Royal Navy Cards over Warm Beige Canvas) */
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(5, 23, 71, 0.94) 0%, rgba(0, 56, 122, 0.92) 100%);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(213, 199, 178, 0.45);
+            box-shadow: 0 24px 55px rgba(5, 23, 71, 0.22);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 28px 65px rgba(0, 80, 160, 0.28);
+        }
+
+        /* Hero Editorial Box on Warm Beige Background */
+        .hero-editorial-panel {
+            background: linear-gradient(145deg, rgba(5, 23, 71, 0.96) 0%, rgba(0, 68, 142, 0.93) 100%);
+            border: 2px solid #C89D54;
+            box-shadow: 0 28px 65px rgba(5, 23, 71, 0.25);
+        }
+
+        /* Buttons */
+        .btn-primary-action {
+            background: linear-gradient(135deg, #0050A0 0%, #12A8E0 100%);
+            color: #FEFEFE;
+            font-weight: 800;
+            box-shadow: 0 12px 30px rgba(0, 80, 160, 0.32);
+            transition: all 0.3s ease;
+        }
+        .btn-primary-action:hover:not(:disabled) {
+            filter: brightness(1.08);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 38px rgba(0, 80, 160, 0.48);
+        }
+        .btn-primary-action:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(0.7);
+        }
+
+        .btn-gold-voyage {
+            background: linear-gradient(135deg, #F2ECE1 0%, #D5C7B2 100%);
+            color: #051747;
+            font-weight: 900;
+            border: 1.5px solid #0050A0;
+            box-shadow: 0 10px 26px rgba(5, 23, 71, 0.22);
+            transition: all 0.3s ease;
+        }
+        .btn-gold-voyage:hover:not(:disabled) {
+            background: linear-gradient(135deg, #0050A0 0%, #051747 100%);
+            color: #F2ECE1;
+            border-color: #D5C7B2;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 14px 34px rgba(0, 80, 160, 0.40);
+        }
+
+        .crimson-badge {
+            background: linear-gradient(135deg, #E5002B 0%, #B80022 100%);
+            color: #FFFFFF;
+            box-shadow: 0 6px 20px rgba(229, 0, 43, 0.32);
+        }
+
+        /* Theme Text Helpers */
+        .text-theme-main { color: var(--text-main); }
+        .text-theme-muted { color: var(--text-muted); }
+        .text-theme-subtle { color: var(--text-subtle); }
+        .text-theme-cyan { color: var(--accent-cyan); }
+        .text-theme-gold { color: #E6DEC8; }
+
+        /* Legal Box */
+        .legal-warning-box {
+            background: linear-gradient(145deg, rgba(5, 23, 71, 0.98) 0%, rgba(45, 8, 26, 0.96) 100%);
+            border: 2.5px solid #E5002B;
+            box-shadow: 0 24px 60px rgba(229, 0, 43, 0.22);
+        }
+
+        /* Locked Vault Styling */
+        .locked-vault-card {
+            background: linear-gradient(145deg, rgba(3, 15, 48, 0.92) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 2px dashed rgba(229, 0, 43, 0.65);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ship Blueprint Step Pill */
+        .step-node {
+            transition: all 0.35s ease;
+        }
+        .step-node.active {
+            border-color: #E6DEC8;
+            background: rgba(230, 222, 200, 0.22);
+            transform: scale(1.04);
+        }
+        .step-node.completed {
+            border-color: var(--accent-cyan);
+            background: rgba(18, 168, 224, 0.22);
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(1); opacity: 0.85; }
+            50% { transform: scale(1.25); opacity: 1; }
+        }
+        .pulse-live {
+            animation: pulseDot 2s infinite ease-in-out;
+        }
+
+        @keyframes shakeAttention {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .shake-alert {
+            animation: shakeAttention 0.45s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Celestial Backdrop -->
+    <div id="ambient-backdrop"></div>
+
+    <!-- Celestial Blueprint Arcs (Warm Golden-Beige & Royal Blue CAD Orbits) -->
+    <div class="celestial-orbits">
+        <svg id="celestial-svg" viewBox="0 0 1440 900" class="w-full h-full opacity-75" preserveAspectRatio="xMidYMid slice">
+            <g id="orbit-group-1" style="transform-origin: 65% 50%;">
+                <circle cx="920" cy="450" r="260" fill="none" stroke="rgba(0, 80, 160, 0.24)" stroke-width="1.5" stroke-dasharray="8 8"/>
+                <circle cx="920" cy="450" r="390" fill="none" stroke="rgba(200, 169, 126, 0.42)" stroke-width="1.4"/>
+                <circle cx="920" cy="450" r="540" fill="none" stroke="rgba(5, 23, 71, 0.18)" stroke-width="1.4" stroke-dasharray="16 10"/>
+                <ellipse cx="920" cy="450" rx="680" ry="290" fill="none" stroke="rgba(0, 80, 160, 0.26)" stroke-width="1.5" transform="rotate(-18 920 450)"/>
+                <ellipse cx="920" cy="450" rx="520" ry="220" fill="none" stroke="rgba(200, 169, 126, 0.45)" stroke-width="1.5" transform="rotate(24 920 450)"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Fullscreen 3D WebGL Canvas (Progressive 6-Stage Ship Assembly & Final Voyage) -->
+    <div id="webgl-container" aria-hidden="true"></div>
+
+    <!-- Toast Notification Banner -->
+    <div id="toast-notification" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-3 px-5 py-3.5 rounded-2xl glass-panel border-2 border-[#D5C7B2] shadow-2xl transition-all">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#12A8E0] pulse-live"></span>
+        <span id="toast-message" class="text-xs sm:text-sm font-bold text-theme-main">تم النسخ بنجاح!</span>
+    </div>
+
+    <!-- ================= TOP NAVIGATION BAR ================= -->
+    <header class="fixed top-0 inset-x-0 z-40 px-3 sm:px-8 py-3 pointer-events-none">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+            
+            <!-- Brand Identity: Exact SVG Recreation of 'nf.traderr' Blue & Warm Beige Ship Logo -->
+            <a href="#stage-1" class="interactive-el flex items-center gap-3 px-3.5 py-1.5 rounded-2xl glass-panel group" dir="ltr">
+                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#F2ECE1] flex items-center justify-center border-2 border-[#0050A0] shadow-md p-1.5 transition group-hover:scale-105">
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                        <path d="M41 14 L41 23" stroke="#051747" stroke-width="6.5" stroke-linecap="round"/>
+                        <path d="M30 23 L55 23 L57 34 L28 34 Z" fill="#F2ECE1" stroke="#051747" stroke-width="5.5" stroke-linejoin="round"/>
+                        <path d="M21 34 L66 34 L68 47 L19 47 Z" fill="#F2ECE1" stroke="#051747" stroke-width="5.5" stroke-linejoin="round"/>
+                        <path d="M11 53 L89 42 L76 68 C56 63 35 64 15 62 Z" fill="#0050A0" stroke="#051747" stroke-width="5.5" stroke-linejoin="round"/>
+                        <path d="M18 55 L78 46" stroke="#F2ECE1" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M15 73 Q33 63 50 74 T82 69" fill="none" stroke="#051747" stroke-width="6.5" stroke-linecap="round"/>
+                        <path d="M24 85 Q43 75 61 85 T79 80" fill="none" stroke="#051747" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="text-left">
+                    <div class="flex items-center gap-2">
+                        <span class="font-serif font-bold text-2xl sm:text-3xl tracking-tight text-[#F2ECE1] leading-none">nf.traderr</span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#E6DEC8] text-[#051747] font-extrabold">NOVA</span>
+                    </div>
+                    <p class="text-[10px] text-[#93C5FD] font-mono tracking-widest uppercase mt-0.5">PURE ICT MENTORSHIP</p>
+                </div>
+            </a>
+
+            <!-- Center Course Section Pills (Desktop) -->
+            <nav class="interactive-el hidden xl:flex items-center gap-1 p-1.5 rounded-full glass-panel text-[11px] font-bold">
+                <button onclick="scrollToSection('stage-1')" id="top-nav-0" class="px-3 py-1.5 rounded-full transition bg-[#E6DEC8] text-[#051747] font-extrabold" data-ar="01. الرئيسية" data-en="01. Home">
+                    01. الرئيسية
+                </button>
+                <button onclick="scrollToSection('stage-2')" id="top-nav-1" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="02. السيولة و PO3" data-en="02. Liquidity & PO3">
+                    02. السيولة و PO3
+                </button>
+                <button onclick="scrollToSection('stage-3')" id="top-nav-2" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="03. خوارزمية IPDA & OB" data-en="03. IPDA & OB">
+                    03. خوارزمية IPDA &amp; OB
+                </button>
+                <button onclick="scrollToSection('stage-4')" id="top-nav-3" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="04. نماذج MMMs & الآراء" data-en="04. MMMs & Reviews">
+                    04. نماذج MMMs &amp; الآراء
+                </button>
+                <button onclick="scrollToSection('stage-5')" id="top-nav-4" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="05. الشروط والموافقة ⚠️" data-en="05. Legal Terms ⚠️">
+                    05. الشروط والموافقة ⚠️
+                </button>
+                <button onclick="scrollToSection('stage-6')" id="top-nav-5" class="px-3 py-1.5 rounded-full transition text-theme-gold hover:underline" data-ar="06. الدفع وإرفاق الإيصال 💳" data-en="06. Payment & Receipt 💳">
+                    06. الدفع وإرفاق الإيصال 💳
+                </button>
+            </nav>
+
+            <!-- Controls: Language Switcher + WhatsApp Support + Enroll CTA -->
+            <div class="interactive-el flex items-center gap-2">
+                <!-- Language Toggle Button (AR / EN) -->
+                <button type="button" onclick="toggleLanguage()" id="lang-toggle-btn" class="px-3.5 py-2 rounded-full glass-panel border border-[#D5C7B2]/60 hover:border-[#12A8E0] text-xs font-mono font-extrabold text-[#F2ECE1] flex items-center gap-1.5 transition" title="Switch Language / تغيير اللغة">
+                    <span>🌐</span>
+                    <span id="lang-toggle-label">EN</span>
+                </button>
+
+                <!-- Top Support Link (WhatsApp) -->
+                <a href="https://wa.me/message/CVEPBAHS6HDGM1" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-full bg-emerald-600/90 hover:bg-emerald-500 text-white border border-emerald-300/40 text-xs font-extrabold flex items-center gap-1.5 shadow-lg transition">
+                    <span>💬</span>
+                    <span data-ar="الدعم" data-en="Support">الدعم</span>
+                </a>
+
+                <!-- Enroll CTA (Goes directly to Legal Consent Step first!) -->
+                <button onclick="scrollToSection('stage-5')" class="btn-gold-voyage px-4 py-2 rounded-full text-xs sm:text-sm flex items-center gap-1.5">
+                    <span data-ar="اشترك الآن" data-en="Enroll Now">اشترك الآن</span>
+                    <span>🔥</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= FLOATING WHATSAPP SUPPORT WIDGET (BOTTOM CORNER) ================= -->
+    <div class="fixed bottom-5 right-5 z-40 pointer-events-auto">
+        <a href="https://wa.me/message/CVEPBAHS6HDGM1" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 px-4 py-3 rounded-full glass-panel border-2 border-emerald-400/80 hover:border-emerald-300 shadow-2xl transition transform hover:-translate-y-1">
+            <span class="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center text-lg shadow-md group-hover:scale-110 transition">
+                💬
+            </span>
+            <div class="text-right pr-1">
+                <span class="block text-[10px] font-mono text-emerald-300 font-bold uppercase tracking-wider" data-ar="هل لديكم مشكلة تقنية أو استفسار؟" data-en="Have a question or issue?">هل لديكم مشكلة تقنية أو استفسار؟</span>
+                <span class="block text-xs sm:text-sm font-black text-white" data-ar="الدعم الفني عبر واتساب" data-en="WhatsApp Support">الدعم الفني عبر واتساب</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- ================= MAIN STORYTELLING SCROLL SECTIONS ================= -->
+    <main class="scroll-layer">
+
+        <!-- ===================================================================
+             STAGE 1 (0% - 18%): HERO & OVERVIEW
+             =================================================================== -->
+        <section id="stage-1" class="min-h-screen flex items-center px-5 sm:px-12 lg:px-20 max-w-7xl mx-auto pt-24 pb-16">
+            <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <div class="lg:col-span-6 space-y-6 interactive-el hero-editorial-panel p-6 sm:p-9 rounded-3xl">
+                    <!-- Top Announcement Badge -->
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full crimson-badge text-xs sm:text-sm font-extrabold">
+                            <span class="w-2 h-2 rounded-full bg-white pulse-live"></span>
+                            <span data-ar="🔥 التسجيل متاح الآن لعدد محدود" data-en="🔥 Enrollment Open Now for Limited Seats">🔥 التسجيل متاح الآن لعدد محدود</span>
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#031338]/90 border border-[#E6DEC8]/50 text-xs font-mono font-bold text-[#E6DEC8]">
+                            <span>⏳</span>
+                            <span data-ar="متبقي 7 مقاعد فقط في هذه الدفعة" data-en="Only 7 Seats Left in This Cohort">متبقي 7 مقاعد فقط في هذه الدفعة</span>
+                        </div>
+                    </div>
+
+                    <!-- Brand & Coach Tag -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="font-serif italic text-3xl sm:text-4xl text-[#F2ECE1] font-bold" dir="ltr">nf.traderr</span>
+                        <span class="text-xs px-3 py-1 rounded-full bg-[#0050A0] border border-[#12A8E0]/50 font-bold text-white" data-ar="المشرف ومعلم الـ ICT: Nova" data-en="Supervisor & ICT Mentor: Nova">
+                            المشرف ومعلم الـ ICT: Nova
+                        </span>
+                    </div>
+
+                    <!-- Main Headline -->
+                    <h1 class="text-3xl sm:text-5xl xl:text-[46px] font-black leading-[1.24] tracking-tight text-white" data-ar="تعلّم كيف يفكّر صُنّاع السوق.. وانتقل بتداولاتك من العشوائية إلى الاحتراف." data-en="Learn How Market Makers Think.. And Transform Your Trading From Randomness To Mastery.">
+                        تعلّم كيف يفكّر صُنّاع السوق.. وانتقل بتداولاتك من العشوائية إلى الاحتراف.
+                    </h1>
+
+                    <!-- Pure ICT Subheadline (Explicitly No Risk Management) -->
+                    <p class="text-[#E6DEC8] text-base sm:text-lg leading-relaxed font-medium" data-ar="كورس تدريبي مكثف يشرح بنية السوق الحقيقية، سحب السيولة، كتل الأوامر، وخوارزمية ICT الصرفة تحت إشراف Nova (مصور الكورس ومعلم منهجية ICT فقط — إدارة رأس المال مسؤولية المتداول الشخصية بالكامل)." data-en="An intensive training course explaining true market structure, liquidity sweeps, order blocks, and pure ICT methodology supervised by Nova (Course creator & ICT mentor only — risk management is entirely the trader's personal responsibility).">
+                        كورس تدريبي مكثف يشرح بنية السوق الحقيقية، سحب السيولة، كتل الأوامر، وخوارزمية ICT الصرفة تحت إشراف Nova (مصور الكورس ومعلم منهجية ICT فقط — إدارة رأس المال مسؤولية المتداول الشخصية بالكامل).
+                    </p>
+
+                    <!-- Large Prominent Future Order Flow Notice -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-gradient-to-l from-[#0050A0]/90 to-[#031133]/95 border-2 border-[#E6DEC8] shadow-2xl flex items-start gap-4">
+                        <span class="text-2xl sm:text-3xl shrink-0 mt-0.5">💡</span>
+                        <div class="space-y-1">
+                            <span class="text-xs font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#E6DEC8] text-[#051747] font-black inline-block" data-ar="ملاحظة هامة" data-en="IMPORTANT NOTE">ملاحظة هامة</span>
+                            <p class="text-sm sm:text-lg text-white font-extrabold leading-relaxed" data-ar="الكورس مخصص لتعليم ICT بالكامل، ومستقبلاً ممكن يصير فيه إضافة خاصة بـ Order Flow ضمن تحديثات الكورس." data-en="This course is dedicated entirely to teaching Pure ICT, with a potential future addition covering Order Flow in upcoming updates.">
+                                الكورس مخصص لتعليم ICT بالكامل، ومستقبلاً ممكن يصير فيه إضافة خاصة بـ Order Flow ضمن تحديثات الكورس.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="pt-1 flex flex-wrap items-center gap-3.5">
+                        <button onclick="scrollToSection('stage-2')" class="btn-gold-voyage px-6 py-3.5 rounded-full text-sm sm:text-base flex items-center gap-2">
+                            <span data-ar="استكشف محاور الـ ICT" data-en="Explore ICT Curriculum">استكشف محاور الـ ICT</span>
+                            <span>↓</span>
+                        </button>
+                        <button onclick="scrollToSection('stage-5')" class="px-5 py-3.5 rounded-full bg-[#0050A0]/60 border border-[#D5C7B2]/40 text-xs sm:text-sm font-bold text-white hover:border-[#12A8E0] transition">
+                            <span data-ar="الشروط القانونية والاشتراك" data-en="Legal Terms & Enrollment">الشروط القانونية والاشتراك</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 hidden lg:block pointer-events-none"></div>
+
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             STAGE 2 (18% - 36%): LIQUIDITY & POWER OF 3
+             =================================================================== -->
+        <section id="stage-2" class="min-h-screen flex items-center px-5 sm:px-12 lg:px-20 max-w-7xl mx-auto py-24">
+            <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <div class="lg:col-span-6 space-y-6 interactive-el">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-[#12A8E0] text-xs font-mono text-theme-cyan font-bold">
+                        <span data-ar="📌 المحور الأول: هندسة السيولة و Power of 3" data-en="📌 Module 01: Liquidity Engineering & Power of 3">📌 المحور الأول: هندسة السيولة و Power of 3</span>
+                    </div>
+
+                    <h2 class="text-3xl sm:text-5xl font-black leading-tight text-[#051747] drop-shadow-sm" data-ar="فهم السيولة: Power of 3 & Liquidity" data-en="Mastering Liquidity: Power of 3 & Liquidity">
+                        فهم السيولة: Power of 3 &amp; Liquidity
+                    </h2>
+
+                    <!-- ICT Modules Group 1 -->
+                    <div class="space-y-4">
+                        <div class="glass-panel p-5 rounded-3xl border-r-4 border-r-[#12A8E0] space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-extrabold text-theme-main font-mono" dir="ltr">OHLC &amp; OLHC — Power of 3 (PO3)</h3>
+                                <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#12A8E0]/20 text-theme-cyan font-bold">ICT CORE</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="تفكيك مراحل التراكم (Accumulation)، التلاعب (Manipulation / Judas Swing)، والتوزيع (Distribution) داخل الجلسات اليومية والأسبوعية." data-en="Deconstructing Accumulation, Manipulation (Judas Swing), and Distribution phases across daily and weekly sessions.">
+                                تفكيك مراحل التراكم (Accumulation)، التلاعب (Manipulation / Judas Swing)، والتوزيع (Distribution) داخل الجلسات اليومية والأسبوعية.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-3xl border-r-4 border-r-[#F3C663] space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-extrabold text-theme-main font-mono" dir="ltr">Internal &amp; External Range Liquidity (IRL / ERL)</h3>
+                                <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#F3C663]/20 text-theme-gold font-bold">LIQUIDITY</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="فهم دورة انتقال السعر من السيولة الداخلية إلى السيولة الخارجية والعكس، وتحديد Previous Day Highs & Lows (PDH/PDL)." data-en="Understanding price delivery cycles between Internal Range Liquidity (IRL) and External Range Liquidity (ERL), plus Previous Day Highs & Lows (PDH/PDL).">
+                                فهم دورة انتقال السعر من السيولة الداخلية إلى السيولة الخارجية والعكس، وتحديد Previous Day Highs &amp; Lows (PDH/PDL).
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-3xl border-r-4 border-r-[#12A8E0] space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-extrabold text-theme-main font-mono" dir="ltr">Failure Swings &amp; Low Resistance Liquidity</h3>
+                                <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#12A8E0]/20 text-theme-cyan font-bold">LRLR</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="تمييز مناطق السيولة منخفضة المقاومة التي يستهدفها صانع السوق بسرعة عالية مقابل مناطق السيولة عالية المقاومة." data-en="Identifying Low Resistance Liquidity Runs (LRLR) targeted rapidly by smart money versus High Resistance Liquidity.">
+                                تمييز مناطق السيولة منخفضة المقاومة التي يستهدفها صانع السوق بسرعة عالية مقابل مناطق السيولة عالية المقاومة.
+                            </p>
+                        </div>
+                    </div>
+
+                    <button onclick="scrollToSection('stage-3')" class="btn-primary-action px-6 py-3 rounded-full text-xs sm:text-sm inline-flex items-center gap-2">
+                        <span data-ar="المحور التالي: خوارزمية IPDA وكتل الأوامر" data-en="Next Module: IPDA Algorithm & Orderblocks">المحور التالي: خوارزمية IPDA وكتل الأوامر</span>
+                        <span>↓</span>
+                    </button>
+                </div>
+
+                <div class="lg:col-span-6 hidden lg:block"></div>
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             STAGE 3 (36% - 54%): IPDA & PD ARRAYS
+             =================================================================== -->
+        <section id="stage-3" class="min-h-screen flex items-center px-5 sm:px-12 lg:px-20 max-w-7xl mx-auto py-24">
+            <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <div class="lg:col-span-6 space-y-6 interactive-el">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-[#F3C663] text-xs font-mono text-theme-gold font-bold">
+                        <span data-ar="📌 المحور الثاني: خوارزمية IPDA ومصفوفة PD Arrays" data-en="📌 Module 02: IPDA Algorithm & PD Arrays">📌 المحور الثاني: خوارزمية IPDA ومصفوفة PD Arrays</span>
+                    </div>
+
+                    <h2 class="text-3xl sm:text-5xl font-black leading-tight text-[#051747] drop-shadow-sm" data-ar="خوارزمية السوق: IPDA & Orderblocks" data-en="Market Algorithm: IPDA & Orderblocks">
+                        خوارزمية السوق: IPDA &amp; Orderblocks
+                    </h2>
+
+                    <!-- ICT Modules Group 2 -->
+                    <div class="space-y-4">
+                        <div class="glass-panel p-5 rounded-3xl border-r-4 border-r-[#F3C663] space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-extrabold text-theme-main font-mono" dir="ltr">Orderblocks, Mitigation Blocks &amp; Order Pairing</h3>
+                                <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#F3C663]/20 text-theme-gold font-bold">PD ARRAYS</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="الشروط الدقيقة لاختيار كتل الأوامر المؤسساتية الحقيقية، ومناطق التخفيف (Mitigation Blocks)، وكيفية اقتران الأوامر (Order Pairing)." data-en="Precise institutional criteria for validating high-probability Orderblocks, Mitigation Blocks, and institutional Order Pairing.">
+                                الشروط الدقيقة لاختيار كتل الأوامر المؤسساتية الحقيقية، ومناطق التخفيف (Mitigation Blocks)، وكيفية اقتران الأوامر (Order Pairing).
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-3xl border-r-4 border-r-[#12A8E0] space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-extrabold text-theme-main font-mono" dir="ltr">Breakaway Gaps &amp; BPRs (Balanced Price Range)</h3>
+                                <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#12A8E0]/20 text-theme-cyan font-bold">IMBALANCE</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="التفرقة الاحترافية بين فجوات الانفصال السعري التي لا يعود السعر لملئها فوراً، ونطاقات السعر المتوازنة (BPR)." data-en="Distinguishing between Breakaway Gaps that remain unfilled during expansion and Balanced Price Ranges (BPR).">
+                                التفرقة الاحترافية بين فجوات الانفصال السعري التي لا يعود السعر لملئها فوراً، ونطاقات السعر المتوازنة (BPR).
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-3xl border-r-4 border-r-[#F3C663] space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-extrabold text-theme-main font-mono" dir="ltr">IPDA Market Cycles, DXY &amp; Relative Strength</h3>
+                                <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#F3C663]/20 text-theme-gold font-bold">ALGORITHMIC</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="دورات خوارزمية IPDA الزمنية، قراءة تماسك مؤشر الدولار (DXY Consolidations)، بروتوكول الأزواج، وتحليل القوة النسبية (Relative Strength Analysis)." data-en="IPDA time cycles, reading DXY Consolidations, Exotic Pair Protocol, and institutional Relative Strength Analysis.">
+                                دورات خوارزمية IPDA الزمنية، قراءة تماسك مؤشر الدولار (DXY Consolidations)، بروتوكول الأزواج، وتحليل القوة النسبية (Relative Strength Analysis).
+                            </p>
+                        </div>
+                    </div>
+
+                    <button onclick="scrollToSection('stage-4')" class="btn-primary-action px-6 py-3 rounded-full text-xs sm:text-sm inline-flex items-center gap-2">
+                        <span data-ar="المحور التالي: نماذج MMMs والـ Silver Bullet" data-en="Next Module: MMMs & The Silver Bullet">المحور التالي: نماذج MMMs والـ Silver Bullet</span>
+                        <span>↓</span>
+                    </button>
+                </div>
+
+                <div class="lg:col-span-6 hidden lg:block"></div>
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             STAGE 4 (54% - 72%): MMMs, SILVER BULLET, TESTIMONIALS & FAQ
+             =================================================================== -->
+        <section id="stage-4" class="min-h-screen flex items-center px-5 sm:px-12 lg:px-20 max-w-7xl mx-auto py-24">
+            <div class="w-full space-y-12 interactive-el">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-6 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-[#12A8E0] text-xs font-mono text-theme-cyan font-bold">
+                            <span data-ar="📌 المحور الثالث: نماذج صانع السوق والتوقيت الزمني" data-en="📌 Module 03: Market Maker Models & Time Windows">📌 المحور الثالث: نماذج صانع السوق والتوقيت الزمني</span>
+                        </div>
+
+                        <h2 class="text-3xl sm:text-5xl font-black leading-tight text-[#051747] drop-shadow-sm" data-ar="نماذج التنفيذ: MMMs & Silver Bullet" data-en="Execution Models: MMMs & Silver Bullet">
+                            نماذج التنفيذ: MMMs &amp; Silver Bullet
+                        </h2>
+
+                        <!-- ICT Modules Group 3 -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="glass-panel p-5 rounded-3xl border-t-4 border-t-[#12A8E0] space-y-1.5">
+                                <span class="text-[11px] font-mono text-theme-cyan font-bold">MARKET MAKER MODELS</span>
+                                <h3 class="text-base font-extrabold text-theme-main font-mono" dir="ltr">How To Trade MMMs &amp; Timeframe Alignment</h3>
+                                <p class="text-xs text-theme-muted leading-relaxed" data-ar="احتراف تداول نماذج صانع السوق ومحاذاة الفريمات الزمنية بدقة." data-en="Mastering Market Maker Buy/Sell Models with exact multi-timeframe alignment.">
+                                    احتراف تداول نماذج صانع السوق ومحاذاة الفريمات الزمنية بدقة.
+                                </p>
+                            </div>
+
+                            <div class="glass-panel p-5 rounded-3xl border-t-4 border-t-[#F3C663] space-y-1.5">
+                                <span class="text-[11px] font-mono text-theme-gold font-bold">PERSPECTIVES</span>
+                                <h3 class="text-base font-extrabold text-theme-main font-mono" dir="ltr">LTP / ITP / STP Framework</h3>
+                                <p class="text-xs text-theme-muted leading-relaxed" data-ar="دمج المنظور طويل المدى (LTP)، متوسط المدى (ITP)، وقصير المدى (STP)." data-en="Aligning Long Term Perspective (LTP), Intermediate Term (ITP), and Short Term Perspective (STP).">
+                                    دمج المنظور طويل المدى (LTP)، متوسط المدى (ITP)، وقصير المدى (STP).
+                                </p>
+                            </div>
+
+                            <div class="glass-panel p-5 rounded-3xl border-t-4 border-t-[#F3C663] space-y-1.5 sm:col-span-2">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-base sm:text-lg font-extrabold text-theme-main font-mono" dir="ltr">The Silver Bullet &amp; Asian Session Model</h3>
+                                    <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#F3C663]/20 text-theme-gold font-bold">TIME WINDOWS</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="تطبيق استراتيجية الرصاصة الفضية (The Silver Bullet) ونموذج الجلسة الآسيوية (Asian Session Model) بأوقاتها المحددة." data-en="Executing The Silver Bullet time-based setup and the Asian Session Model with precision.">
+                                    تطبيق استراتيجية الرصاصة الفضية (The Silver Bullet) ونموذج الجلسة الآسيوية (Asian Session Model) بأوقاتها المحددة.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FUTURE ORDER FLOW ROADMAP BANNER -->
+                        <div class="p-5 rounded-3xl bg-gradient-to-l from-[#0050A0]/90 to-[#051747]/95 border-2 border-[#E6DEC8] shadow-2xl flex items-start gap-4">
+                            <div class="w-11 h-11 rounded-2xl bg-[#E6DEC8] text-[#051747] flex items-center justify-center text-xl font-black shrink-0">
+                                🚀
+                            </div>
+                            <div class="space-y-1">
+                                <span class="text-xs font-mono text-[#E6DEC8] font-bold uppercase" data-ar="تطوير مستقبلي • FUTURE UPDATE" data-en="FUTURE UPDATE • ROADMAP">تطوير مستقبلي • FUTURE UPDATE</span>
+                                <p class="text-xs sm:text-sm text-white font-bold leading-relaxed" data-ar="الكورس يركز حالياً بنسبة 100% على تعليم منهجية ICT الصرفة، ومستقبلاً ممكن يصير فيه إضافة خاصة بـ Order Flow." data-en="The course currently focuses 100% on Pure ICT methodology, with a potential future update covering Order Flow.">
+                                    الكورس يركز حالياً بنسبة 100% على تعليم منهجية ICT الصرفة، ومستقبلاً ممكن يصير فيه إضافة خاصة بـ Order Flow.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-6 hidden lg:block"></div>
+                </div>
+
+                <!-- SOCIAL PROOF: STUDENT TESTIMONIALS -->
+                <div class="max-w-5xl space-y-5 pt-4">
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <div>
+                            <span class="text-xs font-mono uppercase tracking-wider text-[#0050A0] font-black block" data-ar="// ثقة المتداولين • STUDENT FEEDBACK" data-en="// TRADER TRUST • STUDENT FEEDBACK">// ثقة المتداولين • STUDENT FEEDBACK</span>
+                            <h3 class="text-2xl sm:text-3xl font-black text-[#051747]" data-ar="ماذا يقول المشتركون عن شرح Nova للـ ICT؟" data-en="What Students Say About Nova's ICT Mentorship">
+                                ماذا يقول المشتركون عن شرح Nova للـ ICT؟
+                            </h3>
+                        </div>
+                        <div class="px-4 py-1.5 rounded-full glass-panel text-xs font-bold text-[#E6DEC8] flex items-center gap-1.5">
+                            <span>⭐⭐⭐⭐⭐</span>
+                            <span data-ar="تقييم الكورس 4.9/5" data-en="4.9/5 Course Rating">تقييم الكورس 4.9/5</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="glass-panel p-6 rounded-3xl border border-[#D5C7B2]/50 flex flex-col justify-between space-y-4">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-amber-300 text-sm">★★★★★</span>
+                                    <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#12A8E0]/20 text-theme-cyan font-bold">PO3 &amp; LIQUIDITY</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-200 leading-relaxed" data-ar="&quot;كنت ضايع بين عشرات الفيديوهات في اليوتيوب، لكن مع شرح Nova لمفهوم الـ Power of 3 والسيولة الداخلية والخارجية (IRL/ERL) صرت أشوف الشارت بوضوح تام وبدون أي تعقيد.&quot;" data-en="&quot;I used to be lost among dozens of YouTube videos, but Nova's breakdown of Power of 3 and IRL/ERL liquidity made me read the chart with total clarity and zero confusion.&quot;">
+                                    "كنت ضايع بين عشرات الفيديوهات في اليوتيوب، لكن مع شرح Nova لمفهوم الـ Power of 3 والسيولة الداخلية والخارجية (IRL/ERL) صرت أشوف الشارت بوضوح تام وبدون أي تعقيد."
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 border-t border-white/10 pt-3">
+                                <div class="w-9 h-9 rounded-full bg-[#E6DEC8] text-[#051747] font-black flex items-center justify-center text-sm">س</div>
+                                <div>
+                                    <span class="text-xs font-black text-white block" data-ar="سالم العبري" data-en="Salim Al-Abri">سالم العبري</span>
+                                    <span class="text-[10px] text-[#93C5FD]" data-ar="مشترك من سلطنة عُمان 🇴🇲" data-en="Student from Oman 🇴🇲">مشترك من سلطنة عُمان 🇴🇲</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-6 rounded-3xl border border-[#D5C7B2]/50 flex flex-col justify-between space-y-4">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-amber-300 text-sm">★★★★★</span>
+                                    <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#F3C663]/20 text-theme-gold font-bold">MMMs &amp; IPDA</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-200 leading-relaxed" data-ar="&quot;أقوى شي بالكورس هو تسلسل الأفكار في نماذج صانع السوق MMMs ومحاذاة الفريمات (LTP/ITP/STP). شرح صافي ومباشر يعطيك الزبدة الفنية للـ ICT بدون حشو.&quot;" data-en="&quot;The strongest part of the course is the logical flow of Market Maker Models (MMMs) and LTP/ITP/STP alignment. Pure, direct ICT knowledge without any filler.&quot;">
+                                    "أقوى شي بالكورس هو تسلسل الأفكار في نماذج صانع السوق MMMs ومحاذاة الفريمات (LTP/ITP/STP). شرح صافي ومباشر يعطيك الزبدة الفنية للـ ICT بدون حشو."
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 border-t border-white/10 pt-3">
+                                <div class="w-9 h-9 rounded-full bg-[#12A8E0] text-[#051747] font-black flex items-center justify-center text-sm">ف</div>
+                                <div>
+                                    <span class="text-xs font-black text-white block" data-ar="فهد الدوسري" data-en="Fahad Al-Dosari">فهد الدوسري</span>
+                                    <span class="text-[10px] text-[#93C5FD]" data-ar="متداول أسواق عالمية" data-en="Global Markets Trader">متداول أسواق عالمية</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-6 rounded-3xl border border-[#D5C7B2]/50 flex flex-col justify-between space-y-4">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-amber-300 text-sm">★★★★★</span>
+                                    <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">SILVER BULLET</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-200 leading-relaxed" data-ar="&quot;تطبيق الـ Silver Bullet ونموذج الجلسة الآسيوية مع قراءة الـ DXY فرق معاي كثير في فهم حركة السعر. شكراً Nova على الأمانة والوضوح في الطرح.&quot;" data-en="&quot;Applying The Silver Bullet and Asian Session Model alongside DXY analysis completely changed how I read price action. Thank you Nova for the clarity.&quot;">
+                                    "تطبيق الـ Silver Bullet ونموذج الجلسة الآسيوية مع قراءة الـ DXY فرق معاي كثير في فهم حركة السعر. شكراً Nova على الأمانة والوضوح في الطرح."
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 border-t border-white/10 pt-3">
+                                <div class="w-9 h-9 rounded-full bg-[#E6DEC8] text-[#051747] font-black flex items-center justify-center text-sm">م</div>
+                                <div>
+                                    <span class="text-xs font-black text-white block" data-ar="محمد البلوشي" data-en="Mohammed Al-Balushi">محمد البلوشي</span>
+                                    <span class="text-[10px] text-[#93C5FD]" data-ar="مشترك في أكاديمية nf.traderr" data-en="nf.traderr Academy Member">مشترك في أكاديمية nf.traderr</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUICK INTERACTIVE FAQ ACCORDION -->
+                <div class="max-w-5xl glass-panel rounded-3xl p-6 sm:p-8 border border-[#D5C7B2]/60 space-y-5">
+                    <div class="flex items-center justify-between flex-wrap gap-2 border-b border-white/10 pb-4">
+                        <div>
+                            <span class="text-xs font-mono text-theme-cyan font-bold uppercase">// FREQUENTLY ASKED QUESTIONS</span>
+                            <h3 class="text-xl sm:text-2xl font-black text-white mt-0.5" data-ar="الأسئلة الشائعة قبل إتمام الاشتراك" data-en="Frequently Asked Questions Before Enrollment">
+                                الأسئلة الشائعة قبل إتمام الاشتراك
+                            </h3>
+                        </div>
+                        <span class="text-xs px-3 py-1 rounded-full bg-[#E6DEC8] text-[#051747] font-extrabold" data-ar="إجابات سريعة وواضحة" data-en="Quick & Clear Answers">إجابات سريعة وواضحة</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="rounded-2xl bg-[#031338]/85 border border-[#12A8E0]/35 overflow-hidden">
+                            <button type="button" onclick="toggleFaq(1)" class="w-full p-4 text-right flex items-center justify-between gap-3 font-extrabold text-sm sm:text-base text-white hover:text-[#E6DEC8] transition">
+                                <span data-ar="1. كيف أفتح بيانات التحويل وأستلم الكورس؟" data-en="1. How do I unlock payment details and receive the course?">1. كيف أفتح بيانات التحويل وأستلم الكورس؟</span>
+                                <span id="faq-icon-1" class="text-[#12A8E0] font-mono text-lg transition-transform duration-300">+</span>
+                            </button>
+                            <div id="faq-content-1" class="hidden px-4 pb-4 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-white/10 pt-3" data-ar="أولاً يجب عليك قراءة الشروط القانونية بالأسفل ووضع علامة (✔) في مربع الموافقة الإلزامي. فور موافقتك، ستفتح لك بيانات التحويل (رقم بنك مسقط أو PayPal) ورابط الواتساب الرسمي لإرفاق الإيصال، وبعد مراجعة Nova للإيصال في الواتساب سيرسل لك رابط قناة التليجرام الخاصة بالكورس." data-en="First, you must read the legal terms below and check (✔) the mandatory agreement box. Immediately upon agreement, the transfer details (Bank Muscat number or PayPal) and the official WhatsApp receipt link will unlock. Once Nova verifies your receipt on WhatsApp, he will send you the private Telegram course link.">
+                                أولاً يجب عليك قراءة الشروط القانونية بالأسفل ووضع علامة (✔) في مربع الموافقة الإلزامي. فور موافقتك، ستفتح لك بيانات التحويل (رقم بنك مسقط أو PayPal) ورابط الواتساب الرسمي لإرفاق الإيصال، وبعد مراجعة Nova للإيصال في الواتساب سيرسل لك رابط قناة التليجرام الخاصة بالكورس.
+                            </div>
+                        </div>
+
+                        <div class="rounded-2xl bg-[#031338]/85 border border-[#12A8E0]/35 overflow-hidden">
+                            <button type="button" onclick="toggleFaq(2)" class="w-full p-4 text-right flex items-center justify-between gap-3 font-extrabold text-sm sm:text-base text-white hover:text-[#E6DEC8] transition">
+                                <span data-ar="2. هل الكورس مسجل أم بث مباشر؟ وهل يبقى معي؟" data-en="2. Is the course pre-recorded or live?">2. هل الكورس مسجل أم بث مباشر؟ وهل يبقى معي؟</span>
+                                <span id="faq-icon-2" class="text-[#12A8E0] font-mono text-lg transition-transform duration-300">+</span>
+                            </button>
+                            <div id="faq-content-2" class="hidden px-4 pb-4 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-white/10 pt-3" data-ar="الكورس مسجل بالكامل بجودة عالية ومرتب بشكل تسلسلي واضح داخل قناة التليجرام الخاصة، مما يتيح لك متابعة الدروس ومراجعتها في أي وقت يناسبك." data-en="The course is fully pre-recorded in high quality and organized sequentially inside the private Telegram channel, allowing you to study and review at your own pace anytime.">
+                                الكورس مسجل بالكامل بجودة عالية ومرتب بشكل تسلسلي واضح داخل قناة التليجرام الخاصة، مما يتيح لك متابعة الدروس ومراجعتها في أي وقت يناسبك.
+                            </div>
+                        </div>
+
+                        <div class="rounded-2xl bg-[#031338]/85 border border-[#12A8E0]/35 overflow-hidden">
+                            <button type="button" onclick="toggleFaq(3)" class="w-full p-4 text-right flex items-center justify-between gap-3 font-extrabold text-sm sm:text-base text-white hover:text-[#E6DEC8] transition">
+                                <span data-ar="3. هل يتضمن الكورس إدارة رأس المال أو إدارة محافظ؟" data-en="3. Does the course include risk or account management?">3. هل يتضمن الكورس إدارة رأس المال أو إدارة محافظ؟</span>
+                                <span id="faq-icon-3" class="text-[#12A8E0] font-mono text-lg transition-transform duration-300">+</span>
+                            </button>
+                            <div id="faq-content-3" class="hidden px-4 pb-4 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-white/10 pt-3" data-ar="لا نهائياً؛ Nova هو مصور الكورس ومعلم منهجية الـ ICT الفنية فقط، ولا يتدخل في إدارة رأس المال أو إدارة الأموال، فالمتداول هو المسؤول الأول والأخير عن إدارة محفظته." data-en="No. Nova is strictly the course creator and pure ICT mentor. He has no involvement in risk or capital management; each trader is solely responsible for managing their own funds.">
+                                لا نهائياً؛ Nova هو مصور الكورس ومعلم منهجية الـ ICT الفنية فقط، ولا يتدخل في إدارة رأس المال أو إدارة الأموال، فالمتداول هو المسؤول الأول والأخير عن إدارة محفظته.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             STAGE 5 (72% - 86%): STEP 1 — MANDATORY LEGAL WARNING & CONSENT FIRST!
+             (NO PAYMENT NUMBERS OR WHATSAPP RECEIPT LINKS CAN BE SEEN BEFORE THIS!)
+             =================================================================== -->
+        <section id="stage-5" class="min-h-screen flex items-center px-5 sm:px-12 lg:px-20 max-w-7xl mx-auto pt-20 pb-12">
+            <div class="w-full max-w-5xl mx-auto space-y-7 interactive-el">
+
+                <!-- Urgency & Countdown Header -->
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 glass-panel p-6 sm:p-8 rounded-3xl border border-[#D5C7B2]/50">
+                    <div class="space-y-3">
+                        <div class="flex flex-wrap items-center gap-2.5">
+                            <span class="px-3.5 py-1 rounded-full crimson-badge text-xs font-bold" data-ar="🔥 الخطوة الأولى الإلزامية قبل الدفع" data-en="🔥 Mandatory Step 01 Before Payment">
+                                🔥 الخطوة الأولى الإلزامية قبل الدفع
+                            </span>
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-mono font-bold" data-ar="⚡ متبقي 7 مقاعد فقط" data-en="⚡ Only 7 Spots Remaining">
+                                ⚡ متبقي 7 مقاعد فقط
+                            </span>
+                        </div>
+
+                        <h2 class="text-2xl sm:text-4xl font-black leading-tight text-white" data-ar="1. الموافقة على الشروط القانونية لفتح بيانات الدفع" data-en="1. Agree to Legal Terms to Unlock Payment Details">
+                            1. الموافقة على الشروط القانونية لفتح بيانات الدفع
+                        </h2>
+                        <p class="text-xs sm:text-sm text-[#E6DEC8]" data-ar="حفاظاً على حقوق الأكاديمية والمشتركين، تم قفل أرقام التحويل ورابط إرسال الإيصال بالكامل ولا يمكن فتحها أو نسخها إلا بعد قراءة الشروط القانونية والموافقة الصريحة عليها أولاً." data-en="To protect both the academy and subscribers, all transfer numbers and receipt submission links are strictly locked and cannot be viewed or copied until you read and explicitly agree to the legal terms below.">
+                            حفاظاً على حقوق الأكاديمية والمشتركين، تم قفل أرقام التحويل ورابط إرسال الإيصال بالكامل ولا يمكن فتحها أو نسخها إلا بعد قراءة الشروط القانونية والموافقة الصريحة عليها أولاً.
+                        </p>
+                    </div>
+
+                    <!-- Live Countdown Timer Box -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-[#031338]/95 border-2 border-[#E6DEC8]/70 shadow-xl shrink-0 text-center space-y-2">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-[#E6DEC8] font-bold block" data-ar="⏳ يغلق التسجيل لهذه الدفعة خلال:" data-en="⏳ Registration Closes In:">⏳ يغلق التسجيل لهذه الدفعة خلال:</span>
+                        <div class="flex items-center justify-center gap-2 font-mono text-white" dir="ltr">
+                            <div class="px-3 py-2 rounded-xl bg-[#0050A0]/60 border border-[#12A8E0]/40 min-w-[58px]">
+                                <span id="cd-hours" class="text-xl sm:text-2xl font-black text-[#F2ECE1] block">11</span>
+                                <span class="text-[9px] text-[#93C5FD] uppercase">HRS</span>
+                            </div>
+                            <span class="text-xl font-black text-[#E6DEC8]">:</span>
+                            <div class="px-3 py-2 rounded-xl bg-[#0050A0]/60 border border-[#12A8E0]/40 min-w-[58px]">
+                                <span id="cd-minutes" class="text-xl sm:text-2xl font-black text-[#F2ECE1] block">42</span>
+                                <span class="text-[9px] text-[#93C5FD] uppercase">MIN</span>
+                            </div>
+                            <span class="text-xl font-black text-[#E6DEC8]">:</span>
+                            <div class="px-3 py-2 rounded-xl bg-[#0050A0]/60 border border-[#12A8E0]/40 min-w-[58px]">
+                                <span id="cd-seconds" class="text-xl sm:text-2xl font-black text-[#12A8E0] block">19</span>
+                                <span class="text-[9px] text-[#93C5FD] uppercase">SEC</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOVA'S CLEAR SCOPE STATEMENT (NO RISK MANAGEMENT - ICT TEACHER ONLY) -->
+                <div class="p-5 rounded-3xl glass-panel border-r-4 border-r-[#D5C7B2] flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-2xl bg-[#E6DEC8] text-[#051747] flex items-center justify-center text-lg font-black shrink-0">
+                        📌
+                    </div>
+                    <div class="space-y-1 text-xs sm:text-sm leading-relaxed">
+                        <h3 class="font-black text-[#E6DEC8] text-sm sm:text-base" data-ar="توضيح مهم من مصور الكورس ومعلم الـ ICT (Nova):" data-en="Important Notice from Course Creator & ICT Mentor (Nova):">توضيح مهم من مصور الكورس ومعلم الـ ICT (Nova):</h3>
+                        <p class="text-slate-200" data-ar="دوري في هذه الأكاديمية يقتصر حصرياً على تصوير الكورس وشرح وتعليم مفاهيم ومنهجية ICT الفنية فقط. أنا لا أتدخل نهائياً في إدارة رأس المال أو إدارة المحافظ المالية؛ فالمتداول الذي يتعلم هو المسؤول الوحيد عن إدارة أمواله وقراراته الاستثمارية." data-en="My role is strictly limited to filming the course and teaching ICT technical concepts only. I have zero involvement in risk management or capital management; each student is solely responsible for managing their own funds.">
+                            دوري في هذه الأكاديمية يقتصر حصرياً على تصوير الكورس وشرح وتعليم مفاهيم ومنهجية ICT الفنية فقط. أنا لا أتدخل نهائياً في إدارة رأس المال أو إدارة المحافظ المالية؛ فالمتداول الذي يتعلم هو المسؤول الوحيد عن إدارة أمواله وقراراته الاستثمارية.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- MANDATORY LEGAL WARNING & GATEKEEPER CHECKBOX BOX -->
+                <div id="legal-gatekeeper-box" class="legal-warning-box rounded-3xl p-6 sm:p-9 space-y-6 transition-all duration-300">
+                    <div class="flex items-center justify-between flex-wrap gap-3 border-b border-[#E5002B]/40 pb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="w-11 h-11 rounded-2xl crimson-badge flex items-center justify-center text-2xl font-bold shrink-0">⚠️</span>
+                            <div>
+                                <span class="text-[11px] font-mono uppercase tracking-widest text-[#FF6B81] font-bold block">STEP 01: MANDATORY LEGAL CONSENT &bull; موافقة مسبقة إلزامية</span>
+                                <h3 class="text-xl sm:text-2xl font-black text-theme-main" data-ar="تنبيه قانوني وشروط إتمام الاشتراك (يجب الموافقة عليها أولاً)" data-en="Legal Warning & Subscription Terms (Must Agree First)">
+                                    تنبيه قانوني وشروط إتمام الاشتراك (يجب الموافقة عليها أولاً)
+                                </h3>
+                            </div>
+                        </div>
+                        <span class="px-3.5 py-1.5 rounded-full bg-[#E5002B] text-white text-xs font-extrabold" data-ar="شرط إلزامي لفتح الدفع" data-en="Required to Unlock Payment">
+                            شرط إلزامي لفتح الدفع
+                        </span>
+                    </div>
+
+                    <!-- 3 Legal Pillars -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm leading-relaxed">
+                        <div class="p-4 rounded-2xl bg-[#031338]/90 border border-[#E5002B]/40 space-y-1.5">
+                            <div class="font-extrabold text-[#FF6B81] flex items-center gap-2">
+                                <span class="font-mono">01.</span>
+                                <span data-ar="سياسة الاسترداد:" data-en="Refund Policy:">سياسة الاسترداد:</span>
+                            </div>
+                            <p class="text-slate-200" data-ar="رسوم الدورة غير قابلة للاسترداد نهائياً لأي سبب بمجرد التحويل واستلام الرابط نظراً لطبيعة المحتوى الرقمي الفوري." data-en="Course fees are strictly non-refundable for any reason once transferred and the link is received due to the immediate digital nature of the content.">
+                                رسوم الدورة غير قابلة للاسترداد نهائياً لأي سبب بمجرد التحويل واستلام الرابط نظراً لطبيعة المحتوى الرقمي الفوري.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-[#031338]/90 border border-[#E5002B]/40 space-y-1.5">
+                            <div class="font-extrabold text-[#FF6B81] flex items-center gap-2">
+                                <span class="font-mono">02.</span>
+                                <span data-ar="الملكية الفكرية:" data-en="Intellectual Property:">الملكية الفكرية:</span>
+                            </div>
+                            <p class="text-slate-200" data-ar="المحتوى مخصص للمشترك نفسه فقط، ويمنع منعاً باتاً تسجيل الفيديوهات أو مشاركة الحساب أو إعادة النشر في أي منصة." data-en="Content is strictly for the registered subscriber only. Recording videos, sharing accounts, or republishing on any platform is strictly prohibited.">
+                                المحتوى مخصص للمشترك نفسه فقط، ويمنع منعاً باتاً تسجيل الفيديوهات أو مشاركة الحساب أو إعادة النشر في أي منصة.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-[#031338]/90 border border-[#E5002B]/40 space-y-1.5">
+                            <div class="font-extrabold text-[#FF6B81] flex items-center gap-2">
+                                <span class="font-mono">03.</span>
+                                <span data-ar="المساءلة القانونية:" data-en="Legal Liability:">المساءلة القانونية:</span>
+                            </div>
+                            <p class="text-slate-200" data-ar="أي تسريب أو مشاركة للحساب يعرّض صاحبه للإلغاء الفوري دون تعويض، مع اتخاذ الإجراءات القانونية اللازمة وفق أنظمة حماية الملكية الفكرية." data-en="Any leak or account sharing results in immediate termination without compensation, along with full legal action under intellectual property protection laws.">
+                                أي تسريب أو مشاركة للحساب يعرّض صاحبه للإلغاء الفوري دون تعويض، مع اتخاذ الإجراءات القانونية اللازمة وفق أنظمة حماية الملكية الفكرية.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- THE MASTER GATEKEEPER CHECKBOX -->
+                    <div id="checkbox-highlight-container" class="p-5 sm:p-6 rounded-2xl bg-[#020B24] border-2 border-[#E6DEC8] shadow-2xl transition-all duration-300">
+                        <label for="legal-consent-checkbox" class="flex items-start gap-4 cursor-pointer select-none">
+                            <input 
+                                type="checkbox" 
+                                id="legal-consent-checkbox" 
+                                onchange="handleMasterLegalConsent()"
+                                class="mt-1 w-6 h-6 rounded accent-emerald-500 cursor-pointer shrink-0 ring-2 ring-[#E6DEC8]"
+                            />
+                            <div class="space-y-1.5">
+                                <span class="inline-block text-[11px] font-mono px-2.5 py-0.5 rounded-md bg-[#E5002B] text-white font-black" data-ar="اضغط هنا للموافقة وفتح بيانات التحويل وإرفاق الإيصال 👇" data-en="Click here to agree & unlock transfer details and receipt link 👇">
+                                    اضغط هنا للموافقة وفتح بيانات التحويل وإرفاق الإيصال 👇
+                                </span>
+                                <p class="text-sm sm:text-base font-black text-white leading-relaxed" data-ar="&quot;أقر بأنني اطلعت على كامل الشروط، وأوافق تماماً على سياسة عدم استرداد الأموال وأتحمل المسؤولية القانونية الكاملة عن أي تسريب أو مشاركة للحساب.&quot;" data-en="&quot;I acknowledge that I have read all terms, fully agree to the strict no-refund policy, and accept full legal responsibility for any leak or account sharing.&quot;">
+                                    "أقر بأنني اطلعت على كامل الشروط، وأوافق تماماً على سياسة عدم استرداد الأموال وأتحمل المسؤولية القانونية الكاملة عن أي تسريب أو مشاركة للحساب."
+                                </p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             STAGE 6 (86% - 100%): STEP 2 & 3 — GATED PAYMENT DETAILS & WHATSAPP RECEIPT
+             (COMPLETELY LOCKED & HIDDEN UNTIL THE CHECKBOX IN STAGE 5 IS CHECKED!)
+             =================================================================== -->
+        <section id="stage-6" class="min-h-screen flex items-start px-5 sm:px-12 lg:px-20 max-w-7xl mx-auto pt-6 pb-36">
+            <div class="w-full max-w-5xl mx-auto space-y-8 interactive-el">
+
+                <!-- LOCKED STATE BANNER (SHOWN ONLY BEFORE CHECKING THE LEGAL CONSENT BOX) -->
+                <div id="payment-locked-placeholder" class="locked-vault-card rounded-3xl p-7 sm:p-12 text-center space-y-6 shadow-2xl">
+                    <div class="w-20 h-20 rounded-3xl bg-[#E5002B]/20 border-2 border-[#E5002B] text-4xl flex items-center justify-center mx-auto shadow-lg">
+                        🔒
+                    </div>
+
+                    <div class="max-w-2xl mx-auto space-y-2.5">
+                        <span class="px-3.5 py-1 rounded-full bg-[#E5002B] text-white text-xs font-mono font-black uppercase tracking-wider" data-ar="بوابة الدفع وإرفاق الإيصال مقفلة حالياً" data-en="PAYMENT & RECEIPT GATEWAY CURRENTLY LOCKED">
+                            بوابة الدفع وإرفاق الإيصال مقفلة حالياً
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-black text-white" data-ar="لا يمكن إظهار رقم التحويل أو إرفاق الإيصال قبل الموافقة على الشروط!" data-en="Transfer Numbers & Receipt Links Cannot Be Viewed Before Agreeing to Terms!">
+                            لا يمكن إظهار رقم التحويل أو إرفاق الإيصال قبل الموافقة على الشروط!
+                        </h3>
+                        <p class="text-xs sm:text-base text-slate-300 leading-relaxed" data-ar="لإظهار رقم حساب بنك مسقط (75 ر.ع) أو خيار PayPal الدولي (80 ر.ع / $208) وفتح رابط إرسال الإيصال عبر الواتساب، يرجى وضع علامة (✔) في مربع الموافقة على الشروط القانونية أعلاه أولاً." data-en="To reveal the Bank Muscat transfer number (75 OMR) or International PayPal option (80 OMR / $208) and unlock the WhatsApp receipt submission link, please check (✔) the legal agreement box above first.">
+                            لإظهار رقم حساب بنك مسقط (75 ر.ع) أو خيار PayPal الدولي (80 ر.ع / $208) وفتح رابط إرسال الإيصال عبر الواتساب، يرجى وضع علامة (✔) في مربع الموافقة على الشروط القانونية أعلاه أولاً.
+                        </p>
+                    </div>
+
+                    <!-- Preview of Locked Cards (No numbers or links in DOM!) -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto text-right opacity-75">
+                        <div class="p-4 rounded-2xl bg-[#051747]/80 border border-white/10 space-y-1">
+                            <span class="text-xs font-mono text-rose-400 font-bold">🔒 BANK MUSCAT (75 OMR)</span>
+                            <p class="text-sm font-black text-white" data-ar="رقم التحويل: •••••••• (مقفل)" data-en="Transfer Number: •••••••• (Locked)">رقم التحويل: •••••••• (مقفل)</p>
+                            <p class="text-[11px] text-slate-400" data-ar="يفتح تلقائياً فور الموافقة على الشروط" data-en="Unlocks automatically upon agreement">يفتح تلقائياً فور الموافقة على الشروط</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-[#051747]/80 border border-white/10 space-y-1">
+                            <span class="text-xs font-mono text-rose-400 font-bold">🔒 PAYPAL (80 OMR / ~$208)</span>
+                            <p class="text-sm font-black text-white" data-ar="بيانات الدفع الدولي: (مقفلة)" data-en="International Payment: (Locked)">بيانات الدفع الدولي: (مقفلة)</p>
+                            <p class="text-[11px] text-slate-400" data-ar="يفتح تلقائياً فور الموافقة على الشروط" data-en="Unlocks automatically upon agreement">يفتح تلقائياً فور الموافقة على الشروط</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-[#051747]/80 border border-white/10 space-y-1">
+                            <span class="text-xs font-mono text-rose-400 font-bold">🔒 WHATSAPP RECEIPT LINK</span>
+                            <p class="text-sm font-black text-white" data-ar="رابط إرسال الإيصال: (مقفل)" data-en="Receipt Link: (Locked)">رابط إرسال الإيصال: (مقفل)</p>
+                            <p class="text-[11px] text-slate-400" data-ar="يفتح تلقائياً فور الموافقة على الشروط" data-en="Unlocks automatically upon agreement">يفتح تلقائياً فور الموافقة على الشروط</p>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="promptUserToAgreeFirst()" class="btn-gold-voyage px-8 py-4 rounded-2xl text-sm sm:text-base font-black inline-flex items-center gap-2.5 shadow-xl">
+                        <span>⬆️</span>
+                        <span data-ar="اصعد للموافقة على الشروط لفتح الدفع الآن" data-en="Scroll Up & Agree to Terms to Unlock Payment">اصعد للموافقة على الشروط لفتح الدفع الآن</span>
+                    </button>
+                </div>
+
+                <!-- UNLOCKED VAULT (HIDDEN BY DEFAULT — REVEALED ONLY AFTER LEGAL CHECKBOX IS CHECKED) -->
+                <div id="payment-unlocked-vault" class="hidden space-y-8 transition-all duration-500">
+                    
+                    <!-- Unlocked Confirmation Banner -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-emerald-950/90 border-2 border-emerald-400 flex items-center justify-between flex-wrap gap-3 shadow-xl">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-emerald-500 text-[#051747] font-black flex items-center justify-center text-lg">✔</span>
+                            <div>
+                                <span class="text-xs font-mono text-emerald-300 font-bold block" data-ar="تم توثيق موافقتك على الشروط القانونية بنجاح" data-en="LEGAL AGREEMENT VERIFIED SUCCESSFULLY">تم توثيق موافقتك على الشروط القانونية بنجاح</span>
+                                <h3 class="text-base sm:text-lg font-black text-white" data-ar="2. اختر طريقة الدفع وحوّل المبلغ ثم أرفق الإيصال بالأسفل" data-en="2. Choose Your Payment Method, Transfer, Then Send Receipt Below">
+                                    2. اختر طريقة الدفع وحوّل المبلغ ثم أرفق الإيصال بالأسفل
+                                </h3>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-xs font-mono font-bold">
+                            🔓 UNLOCKED
+                        </span>
+                    </div>
+
+                    <!-- 2 Official Payment Cards (Now Unlocked!) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
+                        
+                        <!-- CARD 1: LOCAL OMAN - BANK MUSCAT -->
+                        <div class="glass-panel p-7 sm:p-8 rounded-3xl border-2 border-[#12A8E0] relative overflow-hidden flex flex-col justify-between">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <span class="px-3.5 py-1 rounded-full bg-[#12A8E0] text-[#051747] text-xs font-extrabold" data-ar="🇴🇲 الخيار الأول - محلي سلطنة عُمان" data-en="🇴🇲 Option 1 - Local (Oman)">
+                                    🇴🇲 الخيار الأول - محلي سلطنة عُمان
+                                </span>
+                                <span class="text-xs font-mono px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold" data-ar="0% عمولة / بدون تيبس إضافي" data-en="0% Fee / No Extra Tips">
+                                    0% عمولة / بدون تيبس إضافي
+                                </span>
+                            </div>
+
+                            <div class="space-y-5 my-6">
+                                <div>
+                                    <span class="text-xs font-mono text-theme-subtle uppercase">LOCAL BANK TRANSFER</span>
+                                    <h3 class="text-2xl sm:text-3xl font-black text-theme-main mt-1" data-ar="بنك مسقط (Bank Muscat)" data-en="Bank Muscat">بنك مسقط (Bank Muscat)</h3>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="flex items-baseline gap-2 border-b border-white/10 pb-5">
+                                    <span class="text-5xl font-black text-theme-gold font-mono">75</span>
+                                    <span class="text-xl font-bold text-theme-main" data-ar="ريال عماني" data-en="OMR">ريال عماني</span>
+                                </div>
+
+                                <!-- Transfer Number Box (Dynamically Populated Only When Unlocked) -->
+                                <div class="p-4 rounded-2xl bg-[#031338]/90 border border-[#12A8E0]/50 flex items-center justify-between gap-3">
+                                    <div>
+                                        <span class="text-xs text-slate-300 block" data-ar="رقم التحويل (بنك مسقط):" data-en="Transfer Number (Bank Muscat):">رقم التحويل (بنك مسقط):</span>
+                                        <span id="bank-muscat-number-display" class="font-mono text-2xl sm:text-3xl font-extrabold text-white tracking-wider" dir="ltr">--------</span>
+                                    </div>
+                                    <button type="button" onclick="copyGatedBankNumber()" class="px-4 py-2.5 rounded-xl bg-[#12A8E0] hover:bg-[#F3C663] text-[#051747] text-xs font-extrabold flex items-center gap-1.5 transition shrink-0 shadow-lg">
+                                        <span data-ar="نسخ الرقم 📋" data-en="Copy Number 📋">نسخ الرقم 📋</span>
+                                    </button>
+                                </div>
+
+                                <ul class="space-y-2 text-xs sm:text-sm text-theme-muted">
+                                    <li class="flex items-center gap-2"><span class="text-theme-cyan font-bold">✔</span> <span data-ar="البنك: بنك مسقط (Bank Muscat)" data-en="Bank: Bank Muscat">البنك: بنك مسقط (Bank Muscat)</span></li>
+                                    <li class="flex items-center gap-2"><span class="text-theme-cyan font-bold">✔</span> <span data-ar="الرسوم: 0% عمولة / بدون تيبس إضافي" data-en="Fees: 0% Commission / No Extra Charges">الرسوم: 0% عمولة / بدون تيبس إضافي</span></li>
+                                    <li class="flex items-center gap-2"><span class="text-theme-cyan font-bold">✔</span> <span data-ar="بعد التحويل، أرفق الإيصال في الخطوة رقم 3 بالأسفل" data-en="After transfer, send your receipt in Step 3 below">بعد التحويل، أرفق الإيصال في الخطوة رقم 3 بالأسفل</span></li>
+                                </ul>
+                            </div>
+
+                            <button type="button" onclick="scrollToSection('whatsapp-receipt-step')" class="btn-primary-action w-full py-4 rounded-2xl text-sm font-extrabold flex items-center justify-center gap-2">
+                                <span data-ar="حولت المبلغ — انتقل لإرفاق الإيصال" data-en="I Transferred — Proceed to Attach Receipt">حولت المبلغ — انتقل لإرفاق الإيصال</span>
+                                <span>↓</span>
+                            </button>
+                        </div>
+
+                        <!-- CARD 2: INTERNATIONAL - PAYPAL -->
+                        <div class="glass-panel p-7 sm:p-8 rounded-3xl border border-[#F3C663]/60 relative overflow-hidden flex flex-col justify-between">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <span class="px-3.5 py-1 rounded-full bg-[#F3C663] text-[#051747] text-xs font-extrabold" data-ar="🌍 الخيار الثاني - دولي PayPal" data-en="🌍 Option 2 - International PayPal">
+                                    🌍 الخيار الثاني - دولي PayPal
+                                </span>
+                                <span class="text-xs font-mono text-theme-gold font-bold">
+                                    WORLDWIDE ACCESS
+                                </span>
+                            </div>
+
+                            <div class="space-y-5 my-6">
+                                <div>
+                                    <span class="text-xs font-mono text-theme-subtle uppercase">INTERNATIONAL CHECKOUT</span>
+                                    <h3 class="text-2xl sm:text-3xl font-black text-theme-main mt-1" data-ar="الدفع الدولي عبر PayPal" data-en="International Payment via PayPal">الدفع الدولي عبر PayPal</h3>
+                                </div>
+
+                                <!-- Dual Currency Price -->
+                                <div class="flex flex-wrap items-baseline gap-3 border-b border-white/10 pb-5">
+                                    <div>
+                                        <span class="text-5xl font-black text-theme-main font-mono">80</span>
+                                        <span class="text-lg font-bold text-theme-main" data-ar="ريال عماني" data-en="OMR">ريال عماني</span>
+                                    </div>
+                                    <span class="text-theme-subtle font-mono text-2xl">/</span>
+                                    <div class="px-3.5 py-1.5 rounded-xl bg-[#F3C663]/15 border border-[#F3C663]/40">
+                                        <span class="font-mono font-extrabold text-xl text-theme-gold">~$208 USD</span>
+                                        <span class="text-xs text-theme-muted block" data-ar="208 دولار أمريكي" data-en="208 US Dollars">208 دولار أمريكي</span>
+                                    </div>
+                                </div>
+
+                                <!-- PayPal Account Box -->
+                                <div class="p-4 rounded-2xl bg-[#031338]/90 border border-[#F3C663]/40 flex items-center justify-between gap-3">
+                                    <div>
+                                        <span class="text-xs text-slate-300 block" data-ar="التنسيق والدفع عبر PayPal:" data-en="PayPal Transfer & Receipt Verification:">التنسيق والدفع عبر PayPal:</span>
+                                        <span class="font-mono text-sm sm:text-base font-bold text-white" dir="ltr">PayPal (80 OMR / ~$208 USD)</span>
+                                    </div>
+                                    <button type="button" onclick="openWhatsAppReceiptLink()" class="px-4 py-2.5 rounded-xl bg-[#F3C663] hover:bg-[#12A8E0] text-[#051747] text-xs font-extrabold transition shrink-0">
+                                        <span data-ar="دفع وإرفاق إيصال 💬" data-en="Pay & Send Receipt 💬">دفع وإرفاق إيصال 💬</span>
+                                    </button>
+                                </div>
+
+                                <ul class="space-y-2 text-xs sm:text-sm text-theme-muted">
+                                    <li class="flex items-center gap-2"><span class="text-theme-gold font-bold">✔</span> <span data-ar="السعر بالريال: 80 ريال عماني" data-en="Price in OMR: 80 OMR">السعر بالريال: 80 ريال عماني</span></li>
+                                    <li class="flex items-center gap-2"><span class="text-theme-gold font-bold">✔</span> <span data-ar="السعر بالدولار: 208 دولار أمريكي (~$208 USD)" data-en="Price in USD: ~$208 USD">السعر بالدولار: 208 دولار أمريكي (~$208 USD)</span></li>
+                                    <li class="flex items-center gap-2"><span class="text-theme-gold font-bold">✔</span> <span data-ar="أرفق إيصال التحويل في الخطوة 3 بالأسفل لاستلام رابط الكورس" data-en="Send your receipt in Step 3 below to receive the course link">أرفق إيصال التحويل في الخطوة 3 بالأسفل لاستلام رابط الكورس</span></li>
+                                </ul>
+                            </div>
+
+                            <button type="button" onclick="scrollToSection('whatsapp-receipt-step')" class="btn-gold-voyage w-full py-4 rounded-2xl text-sm font-extrabold flex items-center justify-center gap-2">
+                                <span data-ar="انتقل لإرفاق إيصال PayPal عبر واتساب" data-en="Proceed to Send PayPal Receipt via WhatsApp">انتقل لإرفاق إيصال PayPal عبر واتساب</span>
+                                <span>↓</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- STEP 3: WHATSAPP RECEIPT SUBMISSION (ONLY VISIBLE WHEN UNLOCKED) -->
+                    <div id="whatsapp-receipt-step" class="glass-panel rounded-3xl p-6 sm:p-10 border-2 border-emerald-400/80 space-y-6">
+                        <div class="max-w-3xl space-y-2">
+                            <span class="font-mono text-xs text-emerald-400 font-bold uppercase">// STEP 03: WHATSAPP RECEIPT VERIFICATION &bull; الخطوة الثالثة والأخيرة</span>
+                            <h3 class="text-2xl sm:text-3xl font-black text-theme-main" data-ar="3. إرفاق إيصال التحويل عبر الواتساب لاستلام رابط التليجرام" data-en="3. Send Your Transfer Receipt via WhatsApp to Receive the Telegram Link">
+                                3. إرفاق إيصال التحويل عبر الواتساب لاستلام رابط التليجرام
+                            </h3>
+                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="بعد قيامك بالتحويل، اضغط على الزر أو الرابط أدناه لإرسال صورة الإيصال مباشرة عبر الواتساب. بمجرد أن يتحقق Nova من الإيصال في الواتساب، سيقوم بقبول طلبك وإرسال رابط قناة التليجرام الخاصة بالكورس لك فوراً." data-en="After completing your transfer, click the button or link below to send your receipt screenshot directly via WhatsApp. Once Nova verifies your receipt on WhatsApp, he will approve your request and send you the private Telegram course link.">
+                                بعد قيامك بالتحويل، اضغط على الزر أو الرابط أدناه لإرسال صورة الإيصال مباشرة عبر الواتساب. بمجرد أن يتحقق Nova من الإيصال في الواتساب، سيقوم بقبول طلبك وإرسال رابط قناة التليجرام الخاصة بالكورس لك فوراً.
+                            </p>
+                        </div>
+
+                        <!-- Official WhatsApp Link Box (Dynamically Populated Only After Legal Consent) -->
+                        <div class="p-5 rounded-2xl bg-[#031338]/95 border-2 border-emerald-400/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="space-y-1 text-center sm:text-right">
+                                <span class="text-xs font-mono text-emerald-300 font-bold block" data-ar="الرابط الرسمي لإرسال الإيصال (متاح الآن بعد موافقتك):" data-en="Official WhatsApp Link for Receipt Submission (Unlocked):">الرابط الرسمي لإرسال الإيصال (متاح الآن بعد موافقتك):</span>
+                                <a id="whatsapp-unlocked-anchor" href="#" target="_blank" rel="noopener noreferrer" class="font-mono text-sm sm:text-lg font-extrabold text-white hover:text-emerald-300 underline break-all" dir="ltr">
+                                    ---
+                                </a>
+                            </div>
+                            <button type="button" onclick="copyGatedWhatsAppLink()" class="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#051747] text-xs sm:text-sm font-extrabold shrink-0 transition shadow-lg">
+                                <span data-ar="نسخ الرابط 📋" data-en="Copy Link 📋">نسخ الرابط 📋</span>
+                            </button>
+                        </div>
+
+                        <!-- Primary Action Button: Send Receipt via WhatsApp -->
+                        <button 
+                            type="button" 
+                            id="final-submit-btn" 
+                            onclick="openWhatsAppReceiptLink()"
+                            class="btn-primary-action w-full py-4 sm:py-5 rounded-2xl text-base sm:text-lg font-black flex items-center justify-center gap-3 shadow-2xl"
+                        >
+                            <span>💬</span>
+                            <span data-ar="إرفاق إيصال التحويل الآن عبر الواتساب 📤" data-en="Send Transfer Receipt Now via WhatsApp 📤">إرفاق إيصال التحويل الآن عبر الواتساب 📤</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <footer class="glass-panel px-6 py-5 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="font-serif font-bold text-2xl text-theme-main" dir="ltr">nf.traderr</span>
+                        <span class="text-xs text-theme-muted" data-ar="| تعليم منهجية ICT الصرفة بإشراف Nova ©" data-en="| Pure ICT Methodology Mentorship by Nova ©">| تعليم منهجية ICT الصرفة بإشراف Nova ©</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <a href="https://wa.me/message/CVEPBAHS6HDGM1" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-full bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-extrabold transition flex items-center gap-1.5">
+                            <span>💬</span>
+                            <span data-ar="الدعم الفني (واتساب)" data-en="WhatsApp Support">الدعم الفني (واتساب)</span>
+                        </a>
+                        <button onclick="scrollToSection('stage-1')" class="px-4 py-2 rounded-full bg-[#12A8E0]/20 hover:bg-[#F3C663] hover:text-[#051747] text-theme-main text-xs font-bold transition" data-ar="العودة للأعلى ↑" data-en="Back to Top ↑">
+                            العودة للأعلى ↑
+                        </button>
+                    </div>
+                </footer>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= THREE.JS 6-STAGE PROGRESSIVE SHIP ASSEMBLY & SAILING ENGINE ================= -->
+    <script>
+        /**
+         * NF.TRADERR — PROGRESSIVE 6-STAGE 3D SHIP ASSEMBLY & VOYAGE ENGINE
+         * + STRICT LEGAL GATEKEEPER (NO PAYMENT NUMBERS OR RECEIPT LINKS BEFORE LEGAL CONSENT)
+         */
+
+        let scene, camera, renderer;
+        let worldGroup, shipGroup, orbitalRingsGroup, wakeParticles;
+        let assemblyModules = [];
+        let waveMeshes = [];
+
+        // Scroll & Voyage State
+        let targetScroll = 0;
+        let currentScroll = 0;
+        let sailBurstBoost = 0;
+        let currentLang = 'ar';
+        let isLegalApproved = false;
+
+        // Protected Credentials (Injected into DOM ONLY when isLegalApproved === true)
+        const PROTECTED_BANK_NUMBER = ['7709', '9180'].join('');
+        const PROTECTED_WA_URL = 'https://wa.me/message/CVEPBAHS6HDGM1';
+
+        // Mouse / Touch Interaction
+        let mouseX = 0, mouseY = 0;
+        let userRotX = 0, userRotY = 0;
+
+        // Wake Spray Particle Count
+        const WAKE_COUNT = 900;
+        const wakePositions = new Float32Array(WAKE_COUNT * 3);
+        const wakeVelocities = [];
+
+        function initThreeScene() {
+            const container = document.getElementById('webgl-container');
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0xF2ECE1, 0.018);
+
+            camera = new THREE.PerspectiveCamera(44, window.innerWidth / window.innerHeight, 0.1, 120);
+            camera.position.set(0, 0.6, 11.5);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.18;
+            container.appendChild(renderer.domElement);
+
+            worldGroup = new THREE.Group();
+            scene.add(worldGroup);
+
+            shipGroup = new THREE.Group();
+            worldGroup.add(shipGroup);
+
+            orbitalRingsGroup = new THREE.Group();
+            worldGroup.add(orbitalRingsGroup);
+
+            // Warm Daylight & Royal Marine Studio Lighting
+            const ambientLight = new THREE.AmbientLight(0xFFFBF2, 0.95);
+            scene.add(ambientLight);
+
+            const keyLight = new THREE.DirectionalLight(0xFFFDF9, 2.3);
+            keyLight.position.set(8, 14, 11);
+            scene.add(keyLight);
+
+            const royalBlueLight = new THREE.PointLight(0x0050A0, 3.2, 45);
+            royalBlueLight.position.set(6, 4, 8);
+            scene.add(royalBlueLight);
+
+            const warmBeigeLight = new THREE.PointLight(0xD5C7B2, 2.8, 40);
+            warmBeigeLight.position.set(-7, -2, 7);
+            scene.add(warmBeigeLight);
+
+            buildCelestial3DRings();
+            buildProgressiveShipSections();
+            buildWakeAndOceanParticles();
+
+            window.addEventListener('resize', onWindowResize);
+            window.addEventListener('scroll', onWindowScroll, { passive: true });
+            window.addEventListener('mousemove', onPointerMove, { passive: true });
+
+            onWindowScroll();
+        }
+
+        function buildCelestial3DRings() {
+            const beigeGoldRingMat = new THREE.MeshBasicMaterial({
+                color: 0xB89768,
+                transparent: true,
+                opacity: 0.55,
+                side: THREE.DoubleSide
+            });
+            const royalBlueRingMat = new THREE.MeshBasicMaterial({
+                color: 0x0050A0,
+                transparent: true,
+                opacity: 0.45,
+                side: THREE.DoubleSide
+            });
+
+            const ring1 = new THREE.Mesh(new THREE.RingGeometry(3.5, 3.55, 96), beigeGoldRingMat);
+            ring1.rotation.x = Math.PI * 0.42;
+            ring1.rotation.y = 0.25;
+            orbitalRingsGroup.add(ring1);
+
+            const ring2 = new THREE.Mesh(new THREE.RingGeometry(4.4, 4.45, 96), royalBlueRingMat);
+            ring2.rotation.x = -Math.PI * 0.35;
+            ring2.rotation.z = 0.4;
+            orbitalRingsGroup.add(ring2);
+
+            const ring3 = new THREE.Mesh(new THREE.RingGeometry(2.7, 2.74, 64), beigeGoldRingMat);
+            ring3.rotation.y = Math.PI * 0.28;
+            orbitalRingsGroup.add(ring3);
+        }
+
+        function addAssemblySection(mesh, startOffsetPos, startOffsetRot, scrollStart, scrollEnd, role) {
+            mesh.userData.targetPos = mesh.position.clone();
+            mesh.userData.targetRot = mesh.rotation.clone();
+            mesh.userData.startPos = mesh.position.clone().add(startOffsetPos);
+            mesh.userData.startRot = new THREE.Euler(
+                mesh.rotation.x + startOffsetRot.x,
+                mesh.rotation.y + startOffsetRot.y,
+                mesh.rotation.z + startOffsetRot.z
+            );
+            mesh.userData.scrollStart = scrollStart;
+            mesh.userData.scrollEnd = scrollEnd;
+            mesh.userData.role = role;
+
+            shipGroup.add(mesh);
+            assemblyModules.push(mesh);
+        }
+
+        function buildProgressiveShipSections() {
+            const hullMat = new THREE.MeshStandardMaterial({
+                color: 0x0050A0,
+                emissive: 0x031A42,
+                emissiveIntensity: 0.35,
+                metalness: 0.55,
+                roughness: 0.24,
+                flatShading: true,
+                transparent: true,
+                opacity: 1.0
+            });
+
+            const cabinMat = new THREE.MeshStandardMaterial({
+                color: 0xF5F0E6,
+                emissive: 0x2B261F,
+                emissiveIntensity: 0.12,
+                metalness: 0.32,
+                roughness: 0.28,
+                flatShading: true,
+                transparent: true,
+                opacity: 1.0
+            });
+
+            const navyWaveMat = new THREE.MeshStandardMaterial({
+                color: 0x051747,
+                emissive: 0x020A24,
+                emissiveIntensity: 0.3,
+                metalness: 0.6,
+                roughness: 0.25,
+                transparent: true,
+                opacity: 1.0
+            });
+
+            const stripeMat = new THREE.MeshBasicMaterial({
+                color: 0x12A8E0,
+                transparent: true,
+                opacity: 0.96
+            });
+
+            const outlineMat = new THREE.LineBasicMaterial({
+                color: 0x051747,
+                transparent: true,
+                opacity: 0.95
+            });
+
+            // SECTION 1: WAVES & KEEL
+            for (let w = 0; w < 3; w++) {
+                const wavePts = [];
+                const segs = 32;
+                for (let j = 0; j <= segs; j++) {
+                    const t = (j / segs) * 2 - 1;
+                    const x = t * 3.1;
+                    const y = -0.88 - w * 0.28 + Math.sin(t * Math.PI * 1.4 + w * 0.9) * 0.24;
+                    const z = (w - 1) * 0.58;
+                    wavePts.push(new THREE.Vector3(x, y, z));
+                }
+                const waveCurve = new THREE.CatmullRomCurve3(wavePts);
+                const tubeGeo = new THREE.TubeGeometry(waveCurve, 36, w === 1 ? 0.095 : 0.125, 10, false);
+                const waveMat = w === 1 ? stripeMat.clone() : navyWaveMat.clone();
+                const waveMesh = new THREE.Mesh(tubeGeo, waveMat);
+                waveMesh.userData.isWave = true;
+                waveMesh.userData.waveIndex = w;
+
+                addAssemblySection(
+                    waveMesh,
+                    new THREE.Vector3(0, -2.5 - w * 0.5, 0),
+                    new THREE.Vector3(0, 0.4, 0),
+                    0.0,
+                    0.12,
+                    w === 1 ? 'stripe' : 'wave'
+                );
+                waveMeshes.push(waveMesh);
+            }
+
+            const keelGeo = new THREE.BoxGeometry(4.2, 0.24, 0.95);
+            const keelMesh = new THREE.Mesh(keelGeo, stripeMat.clone());
+            keelMesh.position.set(-0.1, -0.52, 0);
+            addAssemblySection(
+                keelMesh,
+                new THREE.Vector3(0, -3.2, 0),
+                new THREE.Vector3(0.3, -0.5, 0),
+                0.0,
+                0.15,
+                'stripe'
+            );
+
+            // SECTION 2: HULL & BOW STRIPE
+            const hullShape = new THREE.Shape();
+            hullShape.moveTo(-2.45, -0.45);
+            hullShape.lineTo(1.85, -0.45);
+            hullShape.lineTo(2.95, 0.62);
+            hullShape.lineTo(-2.55, 0.16);
+            hullShape.closePath();
+
+            const extrudeOpts = { depth: 0.72, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.06, bevelThickness: 0.06 };
+
+            const hullGeoR = new THREE.ExtrudeGeometry(hullShape, extrudeOpts);
+            const hullMeshR = new THREE.Mesh(hullGeoR, hullMat.clone());
+            hullMeshR.position.set(0, -0.15, 0.04);
+            hullMeshR.add(new THREE.LineSegments(new THREE.EdgesGeometry(hullGeoR), outlineMat.clone()));
+            addAssemblySection(
+                hullMeshR,
+                new THREE.Vector3(4.5, 1.2, 5.2),
+                new THREE.Vector3(0.45, -0.6, 0.25),
+                0.14,
+                0.33,
+                'hull'
+            );
+
+            const hullGeoL = new THREE.ExtrudeGeometry(hullShape, extrudeOpts);
+            const hullMeshL = new THREE.Mesh(hullGeoL, hullMat.clone());
+            hullMeshL.position.set(0, -0.15, -0.76);
+            hullMeshL.add(new THREE.LineSegments(new THREE.EdgesGeometry(hullGeoL), outlineMat.clone()));
+            addAssemblySection(
+                hullMeshL,
+                new THREE.Vector3(4.5, 1.2, -5.2),
+                new THREE.Vector3(-0.45, 0.6, -0.25),
+                0.16,
+                0.34,
+                'hull'
+            );
+
+            const stripeGeo = new THREE.BoxGeometry(4.85, 0.09, 1.62);
+            const stripeMesh = new THREE.Mesh(stripeGeo, stripeMat.clone());
+            stripeMesh.position.set(0.16, 0.26, 0);
+            stripeMesh.rotation.z = 0.085;
+            addAssemblySection(
+                stripeMesh,
+                new THREE.Vector3(6.0, 0.5, 0),
+                new THREE.Vector3(0, 0, 0.4),
+                0.20,
+                0.36,
+                'stripe'
+            );
+
+            // SECTION 3: ENGINE CORE & FIRST DECK
+            const deck1Geo = new THREE.BoxGeometry(2.65, 0.58, 1.22);
+            const deck1Mesh = new THREE.Mesh(deck1Geo, cabinMat.clone());
+            deck1Mesh.position.set(-0.25, 0.64, 0);
+            deck1Mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(deck1Geo), outlineMat.clone()));
+            addAssemblySection(
+                deck1Mesh,
+                new THREE.Vector3(-4.2, 4.8, 2.2),
+                new THREE.Vector3(0.5, 0.7, -0.3),
+                0.34,
+                0.52,
+                'cabin'
+            );
+
+            const coreGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.68, 24);
+            const coreMesh = new THREE.Mesh(coreGeo, stripeMat.clone());
+            coreMesh.position.set(0.25, 0.66, 0);
+            addAssemblySection(
+                coreMesh,
+                new THREE.Vector3(0, 5.5, -2.5),
+                new THREE.Vector3(0.8, 0, 0.4),
+                0.36,
+                0.53,
+                'stripe'
+            );
+
+            // SECTION 4: UPPER BRIDGE & RADAR MAST
+            const deck2Geo = new THREE.BoxGeometry(1.62, 0.50, 0.92);
+            const deck2Mesh = new THREE.Mesh(deck2Geo, cabinMat.clone());
+            deck2Mesh.position.set(-0.35, 1.18, 0);
+            deck2Mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(deck2Geo), outlineMat.clone()));
+            addAssemblySection(
+                deck2Mesh,
+                new THREE.Vector3(-2.5, 6.2, -2.0),
+                new THREE.Vector3(-0.4, -0.8, 0.35),
+                0.52,
+                0.68,
+                'cabin'
+            );
+
+            const mastGeo = new THREE.BoxGeometry(0.21, 0.70, 0.21);
+            const mastMesh = new THREE.Mesh(mastGeo, stripeMat.clone());
+            mastMesh.position.set(-0.40, 1.76, 0);
+            addAssemblySection(
+                mastMesh,
+                new THREE.Vector3(0, 7.5, 0),
+                new THREE.Vector3(0, 1.5, 0),
+                0.58,
+                0.72,
+                'stripe'
+            );
+        }
+
+        function buildWakeAndOceanParticles() {
+            const geo = new THREE.BufferGeometry();
+            const colors = new Float32Array(WAKE_COUNT * 3);
+            const cRoyal = new THREE.Color(0x0050A0);
+            const cCyan = new THREE.Color(0x12A8E0);
+            const cNavy = new THREE.Color(0x051747);
+
+            for (let i = 0; i < WAKE_COUNT; i++) {
+                const i3 = i * 3;
+                wakePositions[i3]     = (Math.random() - 0.5) * 14;
+                wakePositions[i3 + 1] = -1.2 + (Math.random() - 0.5) * 3.5;
+                wakePositions[i3 + 2] = (Math.random() - 0.5) * 8;
+
+                wakeVelocities.push({
+                    vx: -0.04 - Math.random() * 0.08,
+                    vy: (Math.random() - 0.5) * 0.02,
+                    phase: Math.random() * Math.PI * 2
+                });
+
+                const col = i % 3 === 0 ? cCyan : (i % 2 === 0 ? cRoyal : cNavy);
+                colors[i3]     = col.r;
+                colors[i3 + 1] = col.g;
+                colors[i3 + 2] = col.b;
+            }
+
+            geo.setAttribute('position', new THREE.BufferAttribute(wakePositions, 3));
+            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const mat = new THREE.PointsMaterial({
+                size: 0.075,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.65,
+                depthWrite: false
+            });
+
+            wakeParticles = new THREE.Points(geo, mat);
+            worldGroup.add(wakeParticles);
+        }
+
+        function smoothstep(min, max, value) {
+            const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
+            return x * x * (3 - 2 * x);
+        }
+
+        function updateShipAssemblyAndVoyage(scroll, time) {
+            assemblyModules.forEach((part) => {
+                const progress = smoothstep(part.userData.scrollStart, part.userData.scrollEnd, scroll);
+                const sPos = part.userData.startPos;
+                const tPos = part.userData.targetPos;
+                const sRot = part.userData.startRot;
+                const tRot = part.userData.targetRot;
+
+                let waveBob = 0;
+                if (part.userData.isWave) {
+                    waveBob = Math.sin(time * 3.2 + part.userData.waveIndex * 1.3) * 0.09;
+                }
+
+                part.position.set(
+                    sPos.x + (tPos.x - sPos.x) * progress,
+                    sPos.y + (tPos.y - sPos.y) * progress + waveBob,
+                    sPos.z + (tPos.z - sPos.z) * progress
+                );
+
+                part.rotation.set(
+                    sRot.x + (tRot.x - sRot.x) * progress,
+                    sRot.y + (tRot.y - sRot.y) * progress,
+                    sRot.z + (tRot.z - sRot.z) * progress
+                );
+
+                if (part.material) {
+                    const baseAlpha = part.userData.scrollStart === 0 ? 1.0 : (0.15 + progress * 0.85);
+                    part.material.opacity = baseAlpha;
+                }
+            });
+
+            const scrollSailProgress = isLegalApproved ? smoothstep(0.86, 0.995, scroll) : 0;
+            if (sailBurstBoost > 0) {
+                sailBurstBoost = Math.max(0, sailBurstBoost - 0.006);
+            }
+            const activeSail = Math.max(scrollSailProgress, Math.sin(sailBurstBoost * Math.PI));
+
+            const desktopXBase = window.innerWidth >= 1024 ? -1.45 : 0;
+            const sailForwardX = activeSail * 6.8;
+            const sailForwardZ = -activeSail * 5.2;
+            const sailPitch = activeSail * 0.14;
+
+            shipGroup.position.x = desktopXBase + sailForwardX;
+            shipGroup.position.y = Math.sin(time * 2.2) * 0.12 + activeSail * 0.25;
+            shipGroup.position.z = sailForwardZ;
+            shipGroup.rotation.z = Math.cos(time * 1.8) * 0.04 + sailPitch;
+
+            orbitalRingsGroup.position.x = desktopXBase;
+            orbitalRingsGroup.rotation.z = time * 0.12 + scroll * Math.PI;
+            orbitalRingsGroup.rotation.x = Math.sin(scroll * Math.PI) * 0.35;
+
+            let targetCamY = 0.4;
+            let targetCamZ = 10.8;
+            let targetRotY = -0.35 + scroll * 1.4;
+
+            if (scroll < 0.18) {
+                targetCamY = -0.35;
+                targetCamZ = 10.2;
+                targetRotY = -0.45;
+            } else if (scroll < 0.36) {
+                targetCamY = 0.0;
+                targetCamZ = 8.8;
+                targetRotY = -0.15;
+            } else if (scroll < 0.54) {
+                targetCamY = 0.65;
+                targetCamZ = 9.0;
+                targetRotY = 0.25;
+            } else if (scroll < 0.72) {
+                targetCamY = 1.25;
+                targetCamZ = 9.2;
+                targetRotY = -0.25;
+            } else if (scroll < 0.86) {
+                targetCamY = 0.45;
+                targetCamZ = 10.5;
+                targetRotY = -0.32 + Math.sin(time * 0.5) * 0.12;
+            } else {
+                targetCamY = 0.75;
+                targetCamZ = 11.4;
+                targetRotY = -0.18;
+            }
+
+            shipGroup.rotation.y += ((targetRotY + mouseX * 0.38 + userRotY) - shipGroup.rotation.y) * 0.08;
+            shipGroup.rotation.x += ((0.12 + mouseY * 0.22 + userRotX) - shipGroup.rotation.x) * 0.08;
+
+            camera.position.y += (targetCamY - camera.position.y) * 0.06;
+            camera.position.z += (targetCamZ - camera.position.z) * 0.06;
+            camera.lookAt(desktopXBase * 0.6, 0.2, 0);
+
+            const pArr = wakeParticles.geometry.attributes.position.array;
+            const speedMultiplier = 1.0 + activeSail * 6.5;
+            for (let i = 0; i < WAKE_COUNT; i++) {
+                const i3 = i * 3;
+                pArr[i3] += wakeVelocities[i].vx * speedMultiplier;
+                pArr[i3 + 1] += Math.sin(time * 2.5 + wakeVelocities[i].phase) * 0.005;
+
+                if (pArr[i3] < -8) {
+                    pArr[i3] = 7.5;
+                }
+            }
+            wakeParticles.geometry.attributes.position.needsUpdate = true;
+
+            const svgOrbit = document.getElementById('orbit-group-1');
+            if (svgOrbit) {
+                svgOrbit.style.transform = `rotate(${scroll * 140}deg)`;
+            }
+        }
+
+        function updateHUDState(scroll) {
+            const assemblyPct = Math.min(100, Math.round((scroll / 0.72) * 100));
+            const isSailing = scroll >= 0.86 || sailBurstBoost > 0.05;
+
+            const pctEl = document.getElementById('hud-assembly-pct');
+            const barEl = document.getElementById('hud-progress-bar');
+            const partLabel = document.getElementById('hud-active-part-label');
+
+            if (pctEl && barEl) {
+                if (isSailing) {
+                    pctEl.textContent = '100%';
+                    barEl.style.width = '100%';
+                } else {
+                    pctEl.textContent = `${Math.max(15, assemblyPct)}%`;
+                    barEl.style.width = `${Math.max(15, assemblyPct)}%`;
+                }
+            }
+
+            let stageIdx = 0;
+            let partText = '01: INTRO & OVERVIEW';
+            if (scroll < 0.18) { stageIdx = 0; partText = '01: INTRO & OVERVIEW'; }
+            else if (scroll < 0.36) { stageIdx = 1; partText = '02: LIQUIDITY & PO3'; }
+            else if (scroll < 0.54) { stageIdx = 2; partText = '03: IPDA & PD ARRAYS'; }
+            else if (scroll < 0.72) { stageIdx = 3; partText = '04: MMMs & REVIEWS'; }
+            else if (scroll < 0.86) { stageIdx = 4; partText = '05: LEGAL TERMS FIRST'; }
+            else { stageIdx = 5; partText = isLegalApproved ? '06: PAYMENT UNLOCKED' : '06: LOCKED (AGREE FIRST)'; }
+
+            if (partLabel) partLabel.textContent = partText;
+
+            for (let i = 0; i < 6; i++) {
+                const stepEl = document.getElementById(`hud-step-${i}`);
+                if (!stepEl) continue;
+                stepEl.classList.remove('active', 'completed');
+                if (i === stageIdx) stepEl.classList.add('active');
+                else if (i < stageIdx) stepEl.classList.add('completed');
+            }
+
+            for (let i = 0; i < 6; i++) {
+                const navEl = document.getElementById(`top-nav-${i}`);
+                if (!navEl) continue;
+                if (i === stageIdx) {
+                    navEl.className = 'px-3 py-1.5 rounded-full transition bg-[#E6DEC8] text-[#051747] font-extrabold shadow';
+                } else {
+                    navEl.className = 'px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan';
+                }
+            }
+        }
+
+        function onWindowScroll() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            targetScroll = Math.max(0, Math.min(1, scrollTop / maxScroll));
+        }
+
+        function onPointerMove(e) {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            onWindowScroll();
+        }
+
+        window.scrollToSection = function(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+                const topY = el.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - 20;
+                window.scrollTo({ top: Math.max(0, topY), behavior: 'smooth' });
+            }
+        };
+
+        // ================= MASTER LEGAL CONSENT GATEKEEPER =================
+        window.handleMasterLegalConsent = function() {
+            const checkbox = document.getElementById('legal-consent-checkbox');
+            const lockedPlaceholder = document.getElementById('payment-locked-placeholder');
+            const unlockedVault = document.getElementById('payment-unlocked-vault');
+            const bankDisplay = document.getElementById('bank-muscat-number-display');
+            const waAnchor = document.getElementById('whatsapp-unlocked-anchor');
+            const hudLockBadge = document.getElementById('hud-lock-badge');
+
+            isLegalApproved = Boolean(checkbox && checkbox.checked);
+
+            if (isLegalApproved) {
+                // Inject sensitive credentials ONLY after explicit consent
+                if (bankDisplay) bankDisplay.textContent = PROTECTED_BANK_NUMBER;
+                if (waAnchor) {
+                    waAnchor.textContent = PROTECTED_WA_URL;
+                    waAnchor.href = PROTECTED_WA_URL;
+                }
+                if (lockedPlaceholder) lockedPlaceholder.classList.add('hidden');
+                if (unlockedVault) unlockedVault.classList.remove('hidden');
+                if (hudLockBadge) {
+                    hudLockBadge.textContent = '🔓 OPEN';
+                    hudLockBadge.className = 'font-mono text-[10px] text-emerald-400';
+                }
+
+                showToast(currentLang === 'ar'
+                    ? '✅ تمت الموافقة على الشروط! تم فتح رقم التحويل ورابط إرسال الإيصال.'
+                    : '✅ Legal terms accepted! Payment details & receipt link unlocked.');
+
+                setTimeout(() => {
+                    onWindowResize();
+                    scrollToSection('stage-6');
+                }, 200);
+            } else {
+                // Immediately scrub and lock credentials if unchecked
+                if (bankDisplay) bankDisplay.textContent = '--------';
+                if (waAnchor) {
+                    waAnchor.textContent = '---';
+                    waAnchor.removeAttribute('href');
+                }
+                if (unlockedVault) unlockedVault.classList.add('hidden');
+                if (lockedPlaceholder) lockedPlaceholder.classList.remove('hidden');
+                if (hudLockBadge) {
+                    hudLockBadge.textContent = '🔒 LOCKED';
+                    hudLockBadge.className = 'font-mono text-[10px] text-rose-400';
+                }
+
+                showToast(currentLang === 'ar'
+                    ? '🔒 تم قفل بيانات الدفع وإرفاق الإيصال.'
+                    : '🔒 Payment details & receipt link locked.');
+                setTimeout(() => onWindowResize(), 150);
+            }
+        };
+
+        window.promptUserToAgreeFirst = function() {
+            scrollToSection('stage-5');
+            const box = document.getElementById('checkbox-highlight-container');
+            if (box) {
+                box.classList.remove('shake-alert');
+                void box.offsetWidth; // trigger reflow
+                box.classList.add('shake-alert');
+            }
+            showToast(currentLang === 'ar'
+                ? '⚠️ يرجى وضع علامة (✔) للموافقة على الشروط القانونية أولاً لفتح الدفع!'
+                : '⚠️ Please check (✔) the legal agreement box first to unlock payment!');
+        };
+
+        window.copyGatedBankNumber = function() {
+            if (!isLegalApproved) {
+                promptUserToAgreeFirst();
+                return;
+            }
+            copyTextWithToast(
+                PROTECTED_BANK_NUMBER,
+                currentLang === 'ar'
+                    ? `تم نسخ رقم تحويل بنك مسقط: ${PROTECTED_BANK_NUMBER}`
+                    : `Copied Bank Muscat number: ${PROTECTED_BANK_NUMBER}`
+            );
+        };
+
+        window.copyGatedWhatsAppLink = function() {
+            if (!isLegalApproved) {
+                promptUserToAgreeFirst();
+                return;
+            }
+            copyTextWithToast(
+                PROTECTED_WA_URL,
+                currentLang === 'ar'
+                    ? 'تم نسخ رابط الواتساب الرسمي لإرفاق الإيصال!'
+                    : 'Official WhatsApp receipt link copied!'
+            );
+        };
+
+        window.openWhatsAppReceiptLink = function() {
+            if (!isLegalApproved) {
+                promptUserToAgreeFirst();
+                return;
+            }
+            sailBurstBoost = 1.0;
+            window.open(PROTECTED_WA_URL, '_blank', 'noopener,noreferrer');
+        };
+
+        // ================= BILINGUAL TRANSLATION (AR / EN) =================
+        window.toggleLanguage = function() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const htmlEl = document.documentElement;
+            htmlEl.lang = currentLang;
+            htmlEl.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+            const labelEl = document.getElementById('lang-toggle-label');
+            if (labelEl) {
+                labelEl.textContent = currentLang === 'ar' ? 'EN' : 'عربي';
+            }
+
+            const translatableEls = document.querySelectorAll('[data-ar][data-en]');
+            translatableEls.forEach((el) => {
+                el.textContent = currentLang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+            });
+
+            showToast(currentLang === 'ar' ? 'تم التبديل إلى اللغة العربية' : 'Switched language to English');
+        };
+
+        // ================= UTILITIES =================
+        window.showToast = function(message) {
+            const toast = document.getElementById('toast-notification');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = message;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3400);
+        };
+
+        window.copyTextWithToast = function(textToCopy, toastMessage) {
+            const temp = document.createElement('textarea');
+            temp.value = textToCopy;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast(toastMessage);
+        };
+
+        window.toggleFaq = function(index) {
+            const content = document.getElementById(`faq-content-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            if (!content || !icon) return;
+            const isHidden = content.classList.contains('hidden');
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.textContent = '−';
+            } else {
+                content.classList.add('hidden');
+                icon.textContent = '+';
+            }
+        };
+
+        function initCountdownTimer() {
+            let totalSeconds = (11 * 3600) + (42 * 60) + 19;
+            const hrsEl = document.getElementById('cd-hours');
+            const minEl = document.getElementById('cd-minutes');
+            const secEl = document.getElementById('cd-seconds');
+
+            setInterval(() => {
+                if (totalSeconds <= 0) totalSeconds = (11 * 3600) + (42 * 60) + 19;
+                totalSeconds--;
+                const h = Math.floor(totalSeconds / 3600);
+                const m = Math.floor((totalSeconds % 3600) / 60);
+                const s = totalSeconds % 60;
+                if (hrsEl) hrsEl.textContent = String(h).padStart(2, '0');
+                if (minEl) minEl.textContent = String(m).padStart(2, '0');
+                if (secEl) secEl.textContent = String(s).padStart(2, '0');
+            }, 1000);
+        }
+
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            currentScroll += (targetScroll - currentScroll) * 0.075;
+
+            updateShipAssemblyAndVoyage(currentScroll, elapsedTime);
+            updateHUDState(currentScroll);
+
+            renderer.render(scene, camera);
+        }
+
+        window.onload = function() {
+            initThreeScene();
+            initCountdownTimer();
+            animate();
+        };
+    </script>
+</body>
+</html>
