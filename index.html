@@ -170,10 +170,18 @@
             transform: translateY(-2px);
             box-shadow: 0 16px 38px rgba(0, 80, 160, 0.48);
         }
-        .btn-primary-action:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            filter: grayscale(0.7);
+
+        .btn-whatsapp-direct {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: #FFFFFF;
+            font-weight: 900;
+            box-shadow: 0 14px 34px rgba(16, 185, 129, 0.38);
+            transition: all 0.3s ease;
+        }
+        .btn-whatsapp-direct:hover {
+            filter: brightness(1.08);
+            transform: translateY(-2px);
+            box-shadow: 0 18px 42px rgba(16, 185, 129, 0.55);
         }
 
         .btn-gold-voyage {
@@ -218,20 +226,6 @@
             border: 2px dashed rgba(229, 0, 43, 0.65);
             position: relative;
             overflow: hidden;
-        }
-
-        /* Ship Blueprint Step Pill */
-        .step-node {
-            transition: all 0.35s ease;
-        }
-        .step-node.active {
-            border-color: #E6DEC8;
-            background: rgba(230, 222, 200, 0.22);
-            transform: scale(1.04);
-        }
-        .step-node.completed {
-            border-color: var(--accent-cyan);
-            background: rgba(18, 168, 224, 0.22);
         }
 
         @keyframes pulseDot {
@@ -307,22 +301,22 @@
 
             <!-- Center Course Section Pills (Desktop) -->
             <nav class="interactive-el hidden xl:flex items-center gap-1 p-1.5 rounded-full glass-panel text-[11px] font-bold">
-                <button onclick="scrollToSection('stage-1')" id="top-nav-0" class="px-3 py-1.5 rounded-full transition bg-[#E6DEC8] text-[#051747] font-extrabold" data-ar="01. الرئيسية" data-en="01. Home">
+                <button type="button" onclick="scrollToSection('stage-1')" id="top-nav-0" class="px-3 py-1.5 rounded-full transition bg-[#E6DEC8] text-[#051747] font-extrabold" data-ar="01. الرئيسية" data-en="01. Home">
                     01. الرئيسية
                 </button>
-                <button onclick="scrollToSection('stage-2')" id="top-nav-1" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="02. السيولة و PO3" data-en="02. Liquidity & PO3">
+                <button type="button" onclick="scrollToSection('stage-2')" id="top-nav-1" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="02. السيولة و PO3" data-en="02. Liquidity & PO3">
                     02. السيولة و PO3
                 </button>
-                <button onclick="scrollToSection('stage-3')" id="top-nav-2" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="03. خوارزمية IPDA & OB" data-en="03. IPDA & OB">
+                <button type="button" onclick="scrollToSection('stage-3')" id="top-nav-2" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="03. خوارزمية IPDA & OB" data-en="03. IPDA & OB">
                     03. خوارزمية IPDA &amp; OB
                 </button>
-                <button onclick="scrollToSection('stage-4')" id="top-nav-3" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="04. نماذج MMMs & الآراء" data-en="04. MMMs & Reviews">
+                <button type="button" onclick="scrollToSection('stage-4')" id="top-nav-3" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="04. نماذج MMMs & الآراء" data-en="04. MMMs & Reviews">
                     04. نماذج MMMs &amp; الآراء
                 </button>
-                <button onclick="scrollToSection('stage-5')" id="top-nav-4" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="05. الشروط والموافقة ⚠️" data-en="05. Legal Terms ⚠️">
+                <button type="button" onclick="scrollToSection('stage-5')" id="top-nav-4" class="px-3 py-1.5 rounded-full transition text-theme-muted hover:text-theme-cyan" data-ar="05. الشروط والموافقة ⚠️" data-en="05. Legal Terms ⚠️">
                     05. الشروط والموافقة ⚠️
                 </button>
-                <button onclick="scrollToSection('stage-6')" id="top-nav-5" class="px-3 py-1.5 rounded-full transition text-theme-gold hover:underline" data-ar="06. الدفع وإرفاق الإيصال 💳" data-en="06. Payment & Receipt 💳">
+                <button type="button" onclick="scrollToSection('stage-6')" id="top-nav-5" class="px-3 py-1.5 rounded-full transition text-theme-gold hover:underline" data-ar="06. الدفع وإرفاق الإيصال 💳" data-en="06. Payment & Receipt 💳">
                     06. الدفع وإرفاق الإيصال 💳
                 </button>
             </nav>
@@ -335,14 +329,14 @@
                     <span id="lang-toggle-label">EN</span>
                 </button>
 
-                <!-- Top Support Link (WhatsApp) -->
-                <a href="https://wa.me/message/CVEPBAHS6HDGM1" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-full bg-emerald-600/90 hover:bg-emerald-500 text-white border border-emerald-300/40 text-xs font-extrabold flex items-center gap-1.5 shadow-lg transition">
+                <!-- Top Support Link (Direct Native WhatsApp Number Link) -->
+                <a href="https://api.whatsapp.com/send?phone=96877099180" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-full bg-emerald-600/90 hover:bg-emerald-500 text-white border border-emerald-300/40 text-xs font-extrabold flex items-center gap-1.5 shadow-lg transition no-underline">
                     <span>💬</span>
                     <span data-ar="الدعم" data-en="Support">الدعم</span>
                 </a>
 
                 <!-- Enroll CTA (Goes directly to Legal Consent Step first!) -->
-                <button onclick="scrollToSection('stage-5')" class="btn-gold-voyage px-4 py-2 rounded-full text-xs sm:text-sm flex items-center gap-1.5">
+                <button type="button" onclick="scrollToSection('stage-5')" class="btn-gold-voyage px-4 py-2 rounded-full text-xs sm:text-sm flex items-center gap-1.5">
                     <span data-ar="اشترك الآن" data-en="Enroll Now">اشترك الآن</span>
                     <span>🔥</span>
                 </button>
@@ -352,7 +346,7 @@
 
     <!-- ================= FLOATING WHATSAPP SUPPORT WIDGET (BOTTOM CORNER) ================= -->
     <div class="fixed bottom-5 right-5 z-40 pointer-events-auto">
-        <a href="https://wa.me/message/CVEPBAHS6HDGM1" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 px-4 py-3 rounded-full glass-panel border-2 border-emerald-400/80 hover:border-emerald-300 shadow-2xl transition transform hover:-translate-y-1">
+        <a href="https://api.whatsapp.com/send?phone=96877099180" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 px-4 py-3 rounded-full glass-panel border-2 border-emerald-400/80 hover:border-emerald-300 shadow-2xl transition transform hover:-translate-y-1 no-underline">
             <span class="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center text-lg shadow-md group-hover:scale-110 transition">
                 💬
             </span>
@@ -416,11 +410,11 @@
 
                     <!-- CTA Buttons -->
                     <div class="pt-1 flex flex-wrap items-center gap-3.5">
-                        <button onclick="scrollToSection('stage-2')" class="btn-gold-voyage px-6 py-3.5 rounded-full text-sm sm:text-base flex items-center gap-2">
+                        <button type="button" onclick="scrollToSection('stage-2')" class="btn-gold-voyage px-6 py-3.5 rounded-full text-sm sm:text-base flex items-center gap-2">
                             <span data-ar="استكشف محاور الـ ICT" data-en="Explore ICT Curriculum">استكشف محاور الـ ICT</span>
                             <span>↓</span>
                         </button>
-                        <button onclick="scrollToSection('stage-5')" class="px-5 py-3.5 rounded-full bg-[#0050A0]/60 border border-[#D5C7B2]/40 text-xs sm:text-sm font-bold text-white hover:border-[#12A8E0] transition">
+                        <button type="button" onclick="scrollToSection('stage-5')" class="px-5 py-3.5 rounded-full bg-[#0050A0]/60 border border-[#D5C7B2]/40 text-xs sm:text-sm font-bold text-white hover:border-[#12A8E0] transition">
                             <span data-ar="الشروط القانونية والاشتراك" data-en="Legal Terms & Enrollment">الشروط القانونية والاشتراك</span>
                         </button>
                     </div>
@@ -479,7 +473,7 @@
                         </div>
                     </div>
 
-                    <button onclick="scrollToSection('stage-3')" class="btn-primary-action px-6 py-3 rounded-full text-xs sm:text-sm inline-flex items-center gap-2">
+                    <button type="button" onclick="scrollToSection('stage-3')" class="btn-primary-action px-6 py-3 rounded-full text-xs sm:text-sm inline-flex items-center gap-2">
                         <span data-ar="المحور التالي: خوارزمية IPDA وكتل الأوامر" data-en="Next Module: IPDA Algorithm & Orderblocks">المحور التالي: خوارزمية IPDA وكتل الأوامر</span>
                         <span>↓</span>
                     </button>
@@ -537,7 +531,7 @@
                         </div>
                     </div>
 
-                    <button onclick="scrollToSection('stage-4')" class="btn-primary-action px-6 py-3 rounded-full text-xs sm:text-sm inline-flex items-center gap-2">
+                    <button type="button" onclick="scrollToSection('stage-4')" class="btn-primary-action px-6 py-3 rounded-full text-xs sm:text-sm inline-flex items-center gap-2">
                         <span data-ar="المحور التالي: نماذج MMMs والـ Silver Bullet" data-en="Next Module: MMMs & The Silver Bullet">المحور التالي: نماذج MMMs والـ Silver Bullet</span>
                         <span>↓</span>
                     </button>
@@ -702,8 +696,8 @@
                                 <span data-ar="1. كيف أفتح بيانات التحويل وأستلم الكورس؟" data-en="1. How do I unlock payment details and receive the course?">1. كيف أفتح بيانات التحويل وأستلم الكورس؟</span>
                                 <span id="faq-icon-1" class="text-[#12A8E0] font-mono text-lg transition-transform duration-300">+</span>
                             </button>
-                            <div id="faq-content-1" class="hidden px-4 pb-4 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-white/10 pt-3" data-ar="أولاً يجب عليك قراءة الشروط القانونية بالأسفل ووضع علامة (✔) في مربع الموافقة الإلزامي. فور موافقتك، ستفتح لك بيانات التحويل (رقم بنك مسقط أو PayPal) ورابط الواتساب الرسمي لإرفاق الإيصال، وبعد مراجعة Nova للإيصال في الواتساب سيرسل لك رابط قناة التليجرام الخاصة بالكورس." data-en="First, you must read the legal terms below and check (✔) the mandatory agreement box. Immediately upon agreement, the transfer details (Bank Muscat number or PayPal) and the official WhatsApp receipt link will unlock. Once Nova verifies your receipt on WhatsApp, he will send you the private Telegram course link.">
-                                أولاً يجب عليك قراءة الشروط القانونية بالأسفل ووضع علامة (✔) في مربع الموافقة الإلزامي. فور موافقتك، ستفتح لك بيانات التحويل (رقم بنك مسقط أو PayPal) ورابط الواتساب الرسمي لإرفاق الإيصال، وبعد مراجعة Nova للإيصال في الواتساب سيرسل لك رابط قناة التليجرام الخاصة بالكورس.
+                            <div id="faq-content-1" class="hidden px-4 pb-4 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-white/10 pt-3" data-ar="أولاً يجب عليك قراءة الشروط القانونية بالأسفل ووضع علامة (✔) في مربع الموافقة الإلزامي. فور موافقتك، ستفتح لك بيانات التحويل (رقم بنك مسقط أو PayPal) وزر الواتساب المباشر لإرفاق الإيصال، وبعد مراجعة Nova للإيصال في الواتساب سيرسل لك رابط قناة التليجرام الخاصة بالكورس." data-en="First, you must read the legal terms below and check (✔) the mandatory agreement box. Immediately upon agreement, the transfer details (Bank Muscat number or PayPal) and the direct WhatsApp receipt button will unlock. Once Nova verifies your receipt on WhatsApp, he will send you the private Telegram course link.">
+                                أولاً يجب عليك قراءة الشروط القانونية بالأسفل ووضع علامة (✔) في مربع الموافقة الإلزامي. فور موافقتك، ستفتح لك بيانات التحويل (رقم بنك مسقط أو PayPal) وزر الواتساب المباشر لإرفاق الإيصال، وبعد مراجعة Nova للإيصال في الواتساب سيرسل لك رابط قناة التليجرام الخاصة بالكورس.
                             </div>
                         </div>
 
@@ -893,7 +887,7 @@
                         </p>
                     </div>
 
-                    <!-- Preview of Locked Cards (No numbers or links in DOM!) -->
+                    <!-- Preview of Locked Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto text-right opacity-75">
                         <div class="p-4 rounded-2xl bg-[#051747]/80 border border-white/10 space-y-1">
                             <span class="text-xs font-mono text-rose-400 font-bold">🔒 BANK MUSCAT (75 OMR)</span>
@@ -965,11 +959,11 @@
                                     <span class="text-xl font-bold text-theme-main" data-ar="ريال عماني" data-en="OMR">ريال عماني</span>
                                 </div>
 
-                                <!-- Transfer Number Box (Dynamically Populated Only When Unlocked) -->
+                                <!-- Transfer Number Box -->
                                 <div class="p-4 rounded-2xl bg-[#031338]/90 border border-[#12A8E0]/50 flex items-center justify-between gap-3">
                                     <div>
                                         <span class="text-xs text-slate-300 block" data-ar="رقم التحويل (بنك مسقط):" data-en="Transfer Number (Bank Muscat):">رقم التحويل (بنك مسقط):</span>
-                                        <span id="bank-muscat-number-display" class="font-mono text-2xl sm:text-3xl font-extrabold text-white tracking-wider" dir="ltr">--------</span>
+                                        <span id="bank-muscat-number-display" class="font-mono text-2xl sm:text-3xl font-extrabold text-white tracking-wider" dir="ltr">77099180</span>
                                     </div>
                                     <button type="button" onclick="copyGatedBankNumber()" class="px-4 py-2.5 rounded-xl bg-[#12A8E0] hover:bg-[#F3C663] text-[#051747] text-xs font-extrabold flex items-center gap-1.5 transition shrink-0 shadow-lg">
                                         <span data-ar="نسخ الرقم 📋" data-en="Copy Number 📋">نسخ الرقم 📋</span>
@@ -1019,15 +1013,15 @@
                                     </div>
                                 </div>
 
-                                <!-- PayPal Account Box -->
+                                <!-- PayPal Account Box (100% Pure Native Link - No JS Hijack) -->
                                 <div class="p-4 rounded-2xl bg-[#031338]/90 border border-[#F3C663]/40 flex items-center justify-between gap-3">
                                     <div>
                                         <span class="text-xs text-slate-300 block" data-ar="التنسيق والدفع عبر PayPal:" data-en="PayPal Transfer & Receipt Verification:">التنسيق والدفع عبر PayPal:</span>
                                         <span class="font-mono text-sm sm:text-base font-bold text-white" dir="ltr">PayPal (80 OMR / ~$208 USD)</span>
                                     </div>
-                                    <button type="button" onclick="openWhatsAppReceiptLink()" class="px-4 py-2.5 rounded-xl bg-[#F3C663] hover:bg-[#12A8E0] text-[#051747] text-xs font-extrabold transition shrink-0">
+                                    <a href="https://api.whatsapp.com/send?phone=96877099180" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-[#F3C663] hover:bg-[#12A8E0] text-[#051747] text-xs font-extrabold transition shrink-0 inline-block no-underline">
                                         <span data-ar="دفع وإرفاق إيصال 💬" data-en="Pay & Send Receipt 💬">دفع وإرفاق إيصال 💬</span>
-                                    </button>
+                                    </a>
                                 </div>
 
                                 <ul class="space-y-2 text-xs sm:text-sm text-theme-muted">
@@ -1045,41 +1039,67 @@
 
                     </div>
 
-                    <!-- STEP 3: WHATSAPP RECEIPT SUBMISSION (ONLY VISIBLE WHEN UNLOCKED) -->
+                    <!-- STEP 3: WHATSAPP RECEIPT SUBMISSION (PURE NATIVE HTML LINKS - ZERO JS INTERFERENCE) -->
                     <div id="whatsapp-receipt-step" class="glass-panel rounded-3xl p-6 sm:p-10 border-2 border-emerald-400/80 space-y-6">
                         <div class="max-w-3xl space-y-2">
                             <span class="font-mono text-xs text-emerald-400 font-bold uppercase">// STEP 03: WHATSAPP RECEIPT VERIFICATION &bull; الخطوة الثالثة والأخيرة</span>
                             <h3 class="text-2xl sm:text-3xl font-black text-theme-main" data-ar="3. إرفاق إيصال التحويل عبر الواتساب لاستلام رابط التليجرام" data-en="3. Send Your Transfer Receipt via WhatsApp to Receive the Telegram Link">
                                 3. إرفاق إيصال التحويل عبر الواتساب لاستلام رابط التليجرام
                             </h3>
-                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="بعد قيامك بالتحويل، اضغط على الزر أو الرابط أدناه لإرسال صورة الإيصال مباشرة عبر الواتساب. بمجرد أن يتحقق Nova من الإيصال في الواتساب، سيقوم بقبول طلبك وإرسال رابط قناة التليجرام الخاصة بالكورس لك فوراً." data-en="After completing your transfer, click the button or link below to send your receipt screenshot directly via WhatsApp. Once Nova verifies your receipt on WhatsApp, he will approve your request and send you the private Telegram course link.">
-                                بعد قيامك بالتحويل، اضغط على الزر أو الرابط أدناه لإرسال صورة الإيصال مباشرة عبر الواتساب. بمجرد أن يتحقق Nova من الإيصال في الواتساب، سيقوم بقبول طلبك وإرسال رابط قناة التليجرام الخاصة بالكورس لك فوراً.
+                            <p class="text-xs sm:text-sm text-theme-muted leading-relaxed" data-ar="بعد قيامك بالتحويل، اضغط على زر الواتساب المباشر أدناه لإرسال صورة الإيصال إلى Nova. بمجرد التحقق من الإيصال، سيرسل لك رابط قناة التليجرام الخاصة بالكورس فوراً." data-en="After completing your transfer, click the direct WhatsApp button below to send your receipt screenshot to Nova. Once verified, he will send you the private Telegram course link immediately.">
+                                بعد قيامك بالتحويل، اضغط على زر الواتساب المباشر أدناه لإرسال صورة الإيصال إلى Nova. بمجرد التحقق من الإيصال، سيرسل لك رابط قناة التليجرام الخاصة بالكورس فوراً.
                             </p>
                         </div>
 
-                        <!-- Official WhatsApp Link Box (Dynamically Populated Only After Legal Consent) -->
-                        <div class="p-5 rounded-2xl bg-[#031338]/95 border-2 border-emerald-400/60 flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div class="space-y-1 text-center sm:text-right">
-                                <span class="text-xs font-mono text-emerald-300 font-bold block" data-ar="الرابط الرسمي لإرسال الإيصال (متاح الآن بعد موافقتك):" data-en="Official WhatsApp Link for Receipt Submission (Unlocked):">الرابط الرسمي لإرسال الإيصال (متاح الآن بعد موافقتك):</span>
-                                <a id="whatsapp-unlocked-anchor" href="#" target="_blank" rel="noopener noreferrer" class="font-mono text-sm sm:text-lg font-extrabold text-white hover:text-emerald-300 underline break-all" dir="ltr">
-                                    ---
-                                </a>
-                            </div>
-                            <button type="button" onclick="copyGatedWhatsAppLink()" class="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#051747] text-xs sm:text-sm font-extrabold shrink-0 transition shadow-lg">
-                                <span data-ar="نسخ الرابط 📋" data-en="Copy Link 📋">نسخ الرابط 📋</span>
-                            </button>
+                        <!-- PRIMARY ACTION BUTTONS: 100% NATIVE HTML ANCHORS (NO href="#" AND NO JS REDIRECTS) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Button 1: Direct Number API (Works 100% on all phones, tablets, and webviews without hanging on wa.me/message) -->
+                            <a 
+                                href="https://api.whatsapp.com/send?phone=96877099180"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn-whatsapp-direct w-full py-4 sm:py-5 px-6 rounded-2xl text-base sm:text-lg font-black flex items-center justify-center gap-3 shadow-2xl no-underline text-center"
+                            >
+                                <span>💬</span>
+                                <span data-ar="فتح المحادثة وإرفاق الإيصال الآن (مباشر) 📤" data-en="Open Chat & Send Receipt Now (Direct) 📤">فتح المحادثة وإرفاق الإيصال الآن (مباشر) 📤</span>
+                            </a>
+
+                            <!-- Button 2: Direct App Deep Link (whatsapp:// protocol - Launches WhatsApp App directly on Mobile/Tablet) -->
+                            <a 
+                                href="whatsapp://send?phone=96877099180"
+                                class="btn-primary-action w-full py-4 sm:py-5 px-6 rounded-2xl text-base sm:text-lg font-black flex items-center justify-center gap-3 shadow-2xl no-underline text-center"
+                            >
+                                <span>📱</span>
+                                <span data-ar="فتح تطبيق الواتساب مباشرة (بدون متصفح) ⚡" data-en="Open WhatsApp App Directly (No Browser) ⚡">فتح تطبيق الواتساب مباشرة (بدون متصفح) ⚡</span>
+                            </a>
                         </div>
 
-                        <!-- Primary Action Button: Send Receipt via WhatsApp -->
-                        <button 
-                            type="button" 
-                            id="final-submit-btn" 
-                            onclick="openWhatsAppReceiptLink()"
-                            class="btn-primary-action w-full py-4 sm:py-5 rounded-2xl text-base sm:text-lg font-black flex items-center justify-center gap-3 shadow-2xl"
-                        >
-                            <span>💬</span>
-                            <span data-ar="إرفاق إيصال التحويل الآن عبر الواتساب 📤" data-en="Send Transfer Receipt Now via WhatsApp 📤">إرفاق إيصال التحويل الآن عبر الواتساب 📤</span>
-                        </button>
+                        <!-- Official Link & Direct Phone Number Box -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Box A: Direct WhatsApp Phone Number (+968 7709 9180) -->
+                            <div class="p-4 rounded-2xl bg-[#031338]/95 border border-emerald-400/50 flex items-center justify-between gap-3">
+                                <div>
+                                    <span class="text-xs font-mono text-emerald-300 font-bold block" data-ar="رقم الواتساب المباشر لإرسال الإيصال:" data-en="Direct WhatsApp Number for Receipt:">رقم الواتساب المباشر لإرسال الإيصال:</span>
+                                    <span class="font-mono text-lg sm:text-xl font-extrabold text-white" dir="ltr">+968 7709 9180</span>
+                                </div>
+                                <button type="button" onclick="copyTextWithToast('+96877099180', 'تم نسخ رقم الواتساب المباشر: +96877099180')" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#051747] text-xs font-extrabold shrink-0 transition shadow-lg">
+                                    <span data-ar="نسخ الرقم 📋" data-en="Copy Number 📋">نسخ الرقم 📋</span>
+                                </button>
+                            </div>
+
+                            <!-- Box B: Official Short Link (wa.me/message/CVEPBAHS6HDGM1) -->
+                            <div class="p-4 rounded-2xl bg-[#031338]/95 border border-[#12A8E0]/50 flex items-center justify-between gap-3">
+                                <div class="overflow-hidden">
+                                    <span class="text-xs font-mono text-[#93C5FD] font-bold block" data-ar="رابط الواتساب الإضافي:" data-en="Alternative WhatsApp Link:">رابط الواتساب الإضافي:</span>
+                                    <a href="https://wa.me/message/CVEPBAHS6HDGM1" target="_blank" rel="noopener noreferrer" class="font-mono text-xs sm:text-sm font-bold text-white hover:text-emerald-300 underline truncate block" dir="ltr">
+                                        https://wa.me/message/CVEPBAHS6HDGM1
+                                    </a>
+                                </div>
+                                <button type="button" onclick="copyGatedWhatsAppLink()" class="px-4 py-2.5 rounded-xl bg-[#12A8E0] hover:bg-[#F3C663] text-[#051747] text-xs font-extrabold shrink-0 transition shadow-lg">
+                                    <span data-ar="نسخ الرابط 📋" data-en="Copy Link 📋">نسخ الرابط 📋</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -1091,11 +1111,11 @@
                         <span class="text-xs text-theme-muted" data-ar="| تعليم منهجية ICT الصرفة بإشراف Nova ©" data-en="| Pure ICT Methodology Mentorship by Nova ©">| تعليم منهجية ICT الصرفة بإشراف Nova ©</span>
                     </div>
                     <div class="flex items-center gap-2.5">
-                        <a href="https://wa.me/message/CVEPBAHS6HDGM1" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-full bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-extrabold transition flex items-center gap-1.5">
+                        <a href="https://api.whatsapp.com/send?phone=96877099180" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-full bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-extrabold transition flex items-center gap-1.5 no-underline">
                             <span>💬</span>
                             <span data-ar="الدعم الفني (واتساب)" data-en="WhatsApp Support">الدعم الفني (واتساب)</span>
                         </a>
-                        <button onclick="scrollToSection('stage-1')" class="px-4 py-2 rounded-full bg-[#12A8E0]/20 hover:bg-[#F3C663] hover:text-[#051747] text-theme-main text-xs font-bold transition" data-ar="العودة للأعلى ↑" data-en="Back to Top ↑">
+                        <button type="button" onclick="scrollToSection('stage-1')" class="px-4 py-2 rounded-full bg-[#12A8E0]/20 hover:bg-[#F3C663] hover:text-[#051747] text-theme-main text-xs font-bold transition" data-ar="العودة للأعلى ↑" data-en="Back to Top ↑">
                             العودة للأعلى ↑
                         </button>
                     </div>
@@ -1125,8 +1145,7 @@
         let currentLang = 'ar';
         let isLegalApproved = false;
 
-        // Protected Credentials (Injected into DOM ONLY when isLegalApproved === true)
-        const PROTECTED_BANK_NUMBER = ['7709', '9180'].join('');
+        const PROTECTED_BANK_NUMBER = '77099180';
         const PROTECTED_WA_URL = 'https://wa.me/message/CVEPBAHS6HDGM1';
 
         // Mouse / Touch Interaction
@@ -1577,41 +1596,13 @@
         }
 
         function updateHUDState(scroll) {
-            const assemblyPct = Math.min(100, Math.round((scroll / 0.72) * 100));
-            const isSailing = scroll >= 0.86 || sailBurstBoost > 0.05;
-
-            const pctEl = document.getElementById('hud-assembly-pct');
-            const barEl = document.getElementById('hud-progress-bar');
-            const partLabel = document.getElementById('hud-active-part-label');
-
-            if (pctEl && barEl) {
-                if (isSailing) {
-                    pctEl.textContent = '100%';
-                    barEl.style.width = '100%';
-                } else {
-                    pctEl.textContent = `${Math.max(15, assemblyPct)}%`;
-                    barEl.style.width = `${Math.max(15, assemblyPct)}%`;
-                }
-            }
-
             let stageIdx = 0;
-            let partText = '01: INTRO & OVERVIEW';
-            if (scroll < 0.18) { stageIdx = 0; partText = '01: INTRO & OVERVIEW'; }
-            else if (scroll < 0.36) { stageIdx = 1; partText = '02: LIQUIDITY & PO3'; }
-            else if (scroll < 0.54) { stageIdx = 2; partText = '03: IPDA & PD ARRAYS'; }
-            else if (scroll < 0.72) { stageIdx = 3; partText = '04: MMMs & REVIEWS'; }
-            else if (scroll < 0.86) { stageIdx = 4; partText = '05: LEGAL TERMS FIRST'; }
-            else { stageIdx = 5; partText = isLegalApproved ? '06: PAYMENT UNLOCKED' : '06: LOCKED (AGREE FIRST)'; }
-
-            if (partLabel) partLabel.textContent = partText;
-
-            for (let i = 0; i < 6; i++) {
-                const stepEl = document.getElementById(`hud-step-${i}`);
-                if (!stepEl) continue;
-                stepEl.classList.remove('active', 'completed');
-                if (i === stageIdx) stepEl.classList.add('active');
-                else if (i < stageIdx) stepEl.classList.add('completed');
-            }
+            if (scroll < 0.18) { stageIdx = 0; }
+            else if (scroll < 0.36) { stageIdx = 1; }
+            else if (scroll < 0.54) { stageIdx = 2; }
+            else if (scroll < 0.72) { stageIdx = 3; }
+            else if (scroll < 0.86) { stageIdx = 4; }
+            else { stageIdx = 5; }
 
             for (let i = 0; i < 6; i++) {
                 const navEl = document.getElementById(`top-nav-${i}`);
@@ -1655,47 +1646,24 @@
             const checkbox = document.getElementById('legal-consent-checkbox');
             const lockedPlaceholder = document.getElementById('payment-locked-placeholder');
             const unlockedVault = document.getElementById('payment-unlocked-vault');
-            const bankDisplay = document.getElementById('bank-muscat-number-display');
-            const waAnchor = document.getElementById('whatsapp-unlocked-anchor');
-            const hudLockBadge = document.getElementById('hud-lock-badge');
 
             isLegalApproved = Boolean(checkbox && checkbox.checked);
 
             if (isLegalApproved) {
-                // Inject sensitive credentials ONLY after explicit consent
-                if (bankDisplay) bankDisplay.textContent = PROTECTED_BANK_NUMBER;
-                if (waAnchor) {
-                    waAnchor.textContent = PROTECTED_WA_URL;
-                    waAnchor.href = PROTECTED_WA_URL;
-                }
                 if (lockedPlaceholder) lockedPlaceholder.classList.add('hidden');
                 if (unlockedVault) unlockedVault.classList.remove('hidden');
-                if (hudLockBadge) {
-                    hudLockBadge.textContent = '🔓 OPEN';
-                    hudLockBadge.className = 'font-mono text-[10px] text-emerald-400';
-                }
 
                 showToast(currentLang === 'ar'
-                    ? '✅ تمت الموافقة على الشروط! تم فتح رقم التحويل ورابط إرسال الإيصال.'
-                    : '✅ Legal terms accepted! Payment details & receipt link unlocked.');
+                    ? '✅ تمت الموافقة على الشروط! تم فتح رقم التحويل وأزرار الواتساب المباشرة.'
+                    : '✅ Legal terms accepted! Payment details & direct WhatsApp buttons unlocked.');
 
                 setTimeout(() => {
                     onWindowResize();
                     scrollToSection('stage-6');
                 }, 200);
             } else {
-                // Immediately scrub and lock credentials if unchecked
-                if (bankDisplay) bankDisplay.textContent = '--------';
-                if (waAnchor) {
-                    waAnchor.textContent = '---';
-                    waAnchor.removeAttribute('href');
-                }
                 if (unlockedVault) unlockedVault.classList.add('hidden');
                 if (lockedPlaceholder) lockedPlaceholder.classList.remove('hidden');
-                if (hudLockBadge) {
-                    hudLockBadge.textContent = '🔒 LOCKED';
-                    hudLockBadge.className = 'font-mono text-[10px] text-rose-400';
-                }
 
                 showToast(currentLang === 'ar'
                     ? '🔒 تم قفل بيانات الدفع وإرفاق الإيصال.'
@@ -1709,7 +1677,7 @@
             const box = document.getElementById('checkbox-highlight-container');
             if (box) {
                 box.classList.remove('shake-alert');
-                void box.offsetWidth; // trigger reflow
+                void box.offsetWidth;
                 box.classList.add('shake-alert');
             }
             showToast(currentLang === 'ar'
@@ -1741,15 +1709,6 @@
                     ? 'تم نسخ رابط الواتساب الرسمي لإرفاق الإيصال!'
                     : 'Official WhatsApp receipt link copied!'
             );
-        };
-
-        window.openWhatsAppReceiptLink = function() {
-            if (!isLegalApproved) {
-                promptUserToAgreeFirst();
-                return;
-            }
-            sailBurstBoost = 1.0;
-            window.open(PROTECTED_WA_URL, '_blank', 'noopener,noreferrer');
         };
 
         // ================= BILINGUAL TRANSLATION (AR / EN) =================
